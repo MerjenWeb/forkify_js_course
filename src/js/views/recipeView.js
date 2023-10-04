@@ -1,11 +1,13 @@
 // import icons from '../img/icons.svg'; - Parcel 1
 import icons from 'url:../../img/icons.svg'; // Parcel 2
 import { Fraction } from 'fractional'; // this is an npm package (npm install fractional) to implement a functionality that we dont want to to implement ourselves - formatting quantities
-console.log(Fraction);
 
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = 'We could no tfind that recipe. Please try another one!';
+  #message = '';
+
   render(data) {
     this.#data = data;
     const markup = this.#generateMarkup();
@@ -17,7 +19,7 @@ class RecipeView {
     this.#parentElement.innerHTML = '';
   }
 
-  renderSpinner = function () {
+  renderSpinner() {
     const markup = `
     <div class="spinner">
       <svg>
@@ -25,9 +27,47 @@ class RecipeView {
       </svg>
     </div>
   `;
-    this.#parentElement.innerHTML = '';
+    this.#clear();
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  };
+  }
+
+  renderError(message = this.#errorMessage) {
+    const markup = `
+    <div class="error">
+     <div>
+       <svg>
+         <use href="${icons}#icon-alert-triangle"></use>
+       </svg>
+     </div>
+     <p>${message}</p>
+   </div>`;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderMessage(message = this.#message) {
+    const markup = `
+    <div class="message">
+     <div>
+       <svg>
+         <use href="${icons}#icon-smile"></use>
+       </svg>
+     </div>
+     <p>${message}</p>
+   </div>`;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  // This method, which is publisher - needs to get access to the subscriber (controlRecipes) - this is in init fn in controller.js
+  addHandlerRender(handler) {
+    // Change the hash
+    window.addEventListener('hashchange', handler);
+    // Load the page
+    window.addEventListener('load', handler);
+    // To avoid duplicate code above, we use, but it is not working for me
+    // ['haschange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
 
   #generateMarkup() {
     return `

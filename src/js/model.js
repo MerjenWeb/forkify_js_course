@@ -1,3 +1,7 @@
+// import {async} form 'regenerator-runtime';
+import { API_URL } from './config.js';
+import { getJSON } from './helpers.js';
+
 export const state = {
   recipe: {},
 };
@@ -5,14 +9,8 @@ export const state = {
 // This function is not going to return anything, all it will do is to change our state object
 export const loadRecipe = async function (id) {
   try {
-    // fetch function returns a promise, and since we are in an async function, we can then await that promise
-    const res = await fetch(
-      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
-    );
-    // and once we have that result, we convert that to json
-    const data = await res.json();
-    // throwing the error
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    const data = await getJSON(`${API_URL}/${id}`);
+    console.log(data);
 
     // we have recipe on both sides, so we can use destructuring
     // let recipe = data.data.recipe;
@@ -28,6 +26,8 @@ export const loadRecipe = async function (id) {
       ingredients: recipe.ingredients,
     };
   } catch (err) {
-    alert(err);
+    // Temp error handling
+    console.error(`${err}!!!`);
+    throw err;
   }
 };

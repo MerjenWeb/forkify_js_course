@@ -576,7 +576,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"aenu9":[function(require,module,exports) {
 // Importing modules
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _esnextSymbolDisposeJs = require("core-js/modules/esnext.symbol.dispose.js");
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _modelJs = require("./model.js");
 var _recipeViewJs = require("./views/recipeView.js");
@@ -584,19 +583,13 @@ var _recipeViewJsDefault = parcelHelpers.interopDefault(_recipeViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 // controller - 1. Bridge between model and views(which don't know about each other) (updating user interface(view) and ask the model for some data (model)); 2) Handles UI events and dispatches tasks to model and view;
 const recipeContainer = document.querySelector(".recipe");
-const timeout = function(s) {
-    return new Promise(function(_, reject) {
-        setTimeout(function() {
-            reject(new Error(`Request took too long! Timeout after ${s} second`));
-        }, s * 1000);
-    });
-};
 // https://forkify-api.herokuapp.com/v2
 ///////////////////////////////////////
 // main function responsible for loading and rendering recipes
 const controlRecipes = async function() {
     try {
         const id = window.location.hash.slice(1);
+        console.log(id);
         // Throws an error if there is no id, using guard close to handle the error
         if (!id) return;
         (0, _recipeViewJsDefault.default).renderSpinner();
@@ -607,582 +600,725 @@ const controlRecipes = async function() {
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     // catching the error
     } catch (err) {
-        alert(err);
+        (0, _recipeViewJsDefault.default).renderError();
     }
 };
-// Change the hash
-// window.addEventListener('hashchange', controlRecipes);
-// Load the page
-// window.addEventListener('load', controlRecipes);
-// To avoid duplicate code above, we use :
-[
-    "haschange",
-    "load"
-].forEach((ev)=>window.addEventListener(ev, controlRecipes));
-
-},{"core-js/modules/esnext.symbol.dispose.js":"b9ez5","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./model.js":"Y4A21","./views/recipeView.js":"l60JC"}],"b9ez5":[function(require,module,exports) {
-"use strict";
-var global = require("c050e94c4f6437d6");
-var defineWellKnownSymbol = require("efe796c38aca437b");
-var defineProperty = require("d6dbf5d754dc3607").f;
-var getOwnPropertyDescriptor = require("9075339d618418b3").f;
-var Symbol = global.Symbol;
-// `Symbol.dispose` well-known symbol
-// https://github.com/tc39/proposal-explicit-resource-management
-defineWellKnownSymbol("dispose");
-if (Symbol) {
-    var descriptor = getOwnPropertyDescriptor(Symbol, "dispose");
-    // workaround of NodeJS 20.4 bug
-    // https://github.com/nodejs/node/issues/48699
-    // and incorrect descriptor from some transpilers and userland helpers
-    if (descriptor.enumerable && descriptor.configurable && descriptor.writable) defineProperty(Symbol, "dispose", {
-        value: descriptor.value,
-        enumerable: false,
-        configurable: false,
-        writable: false
-    });
-}
-
-},{"c050e94c4f6437d6":"i8HOC","efe796c38aca437b":"en5fF","d6dbf5d754dc3607":"iJR4w","9075339d618418b3":"lk5NI"}],"i8HOC":[function(require,module,exports) {
-var global = arguments[3];
-"use strict";
-var check = function(it) {
-    return it && it.Math === Math && it;
+const init = function() {
+    (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes); // subscriber
 };
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-module.exports = // eslint-disable-next-line es/no-global-this -- safe
-check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || // eslint-disable-next-line no-restricted-globals -- safe
-check(typeof self == "object" && self) || check(typeof global == "object" && global) || // eslint-disable-next-line no-new-func -- fallback
-function() {
-    return this;
-}() || this || Function("return this")();
+init();
 
-},{}],"en5fF":[function(require,module,exports) {
-"use strict";
-var path = require("8d5159b7d317832f");
-var hasOwn = require("42a3ea18819bfbb");
-var wrappedWellKnownSymbolModule = require("7ec639749e279eeb");
-var defineProperty = require("cbbe4becefd5c21c").f;
-module.exports = function(NAME) {
-    var Symbol = path.Symbol || (path.Symbol = {});
-    if (!hasOwn(Symbol, NAME)) defineProperty(Symbol, NAME, {
-        value: wrappedWellKnownSymbolModule.f(NAME)
-    });
-};
-
-},{"8d5159b7d317832f":"gKjqB","42a3ea18819bfbb":"gC2Q5","7ec639749e279eeb":"9TrPc","cbbe4becefd5c21c":"iJR4w"}],"gKjqB":[function(require,module,exports) {
-"use strict";
-var global = require("70f8eb6067a24c7e");
-module.exports = global;
-
-},{"70f8eb6067a24c7e":"i8HOC"}],"gC2Q5":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("f5dcaa60a713971f");
-var toObject = require("ab17c4f45fcf0841");
-var hasOwnProperty = uncurryThis({}.hasOwnProperty);
-// `HasOwnProperty` abstract operation
-// https://tc39.es/ecma262/#sec-hasownproperty
-// eslint-disable-next-line es/no-object-hasown -- safe
-module.exports = Object.hasOwn || function hasOwn(it, key) {
-    return hasOwnProperty(toObject(it), key);
-};
-
-},{"f5dcaa60a713971f":"7GlkT","ab17c4f45fcf0841":"5cb35"}],"7GlkT":[function(require,module,exports) {
-"use strict";
-var NATIVE_BIND = require("829dd7a4e960cf9e");
-var FunctionPrototype = Function.prototype;
-var call = FunctionPrototype.call;
-var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
-module.exports = NATIVE_BIND ? uncurryThisWithBind : function(fn) {
-    return function() {
-        return call.apply(fn, arguments);
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./model.js":"Y4A21","./views/recipeView.js":"l60JC","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
     };
 };
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
-},{"829dd7a4e960cf9e":"i16Dq"}],"i16Dq":[function(require,module,exports) {
-"use strict";
-var fails = require("2642aa7619056f20");
-module.exports = !fails(function() {
-    // eslint-disable-next-line es/no-function-prototype-bind -- safe
-    var test = (function() {}).bind();
-    // eslint-disable-next-line no-prototype-builtins -- safe
-    return typeof test != "function" || test.hasOwnProperty("prototype");
-});
-
-},{"2642aa7619056f20":"hL6D2"}],"hL6D2":[function(require,module,exports) {
-"use strict";
-module.exports = function(exec) {
+},{}],"Y4A21":[function(require,module,exports) {
+// import {async} form 'regenerator-runtime';
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
+var _configJs = require("./config.js");
+var _helpersJs = require("./helpers.js");
+const state = {
+    recipe: {}
+};
+const loadRecipe = async function(id) {
     try {
-        return !!exec();
-    } catch (error) {
-        return true;
+        const data = await (0, _helpersJs.getJSON)(`${(0, _configJs.API_URL)}/${id}`);
+        console.log(data);
+        // we have recipe on both sides, so we can use destructuring
+        // let recipe = data.data.recipe;
+        let { recipe } = data.data;
+        state.recipe = {
+            id: recipe.id,
+            title: recipe.title,
+            publisher: recipe.publisher,
+            sourceUrl: recipe.source_url,
+            image: recipe.image_url,
+            servings: recipe.servings,
+            cookingTime: recipe.cooking_time,
+            ingredients: recipe.ingredients
+        };
+    } catch (err) {
+        // Temp error handling
+        console.error(`${err}!!!`);
+        throw err;
     }
 };
 
-},{}],"5cb35":[function(require,module,exports) {
-"use strict";
-var requireObjectCoercible = require("f45a7b5dcdc4a410");
-var $Object = Object;
-// `ToObject` abstract operation
-// https://tc39.es/ecma262/#sec-toobject
-module.exports = function(argument) {
-    return $Object(requireObjectCoercible(argument));
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs","./helpers.js":"hGI1E"}],"k5Hzs":[function(require,module,exports) {
+// Into this file we put all the variables that should be constants and should be reused across the project (the variables that we want here are the ones that are responsible for defining some important data). The goal of having this file with all these variables is that it will allow us to easily configure (формировать) or project by simply changing some data that is here in this configuration file
+// Using uppercase. because this constant will never change :
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
+const TIMEOUT_SEC = 30;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGI1E":[function(require,module,exports) {
+// The goal of this file is to contain a couple of functions that we reuse over and over in our project
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getJSON", ()=>getJSON);
+var _configJs = require("./config.js");
+const timeout = function(s) {
+    return new Promise(function(_, reject) {
+        setTimeout(function() {
+            reject(new Error(`Request took too long! Timeout after ${s} second`));
+        }, s * 1000);
+    });
 };
-
-},{"f45a7b5dcdc4a410":"fOR0B"}],"fOR0B":[function(require,module,exports) {
-"use strict";
-var isNullOrUndefined = require("74607922ed30019f");
-var $TypeError = TypeError;
-// `RequireObjectCoercible` abstract operation
-// https://tc39.es/ecma262/#sec-requireobjectcoercible
-module.exports = function(it) {
-    if (isNullOrUndefined(it)) throw new $TypeError("Can't call method on " + it);
-    return it;
-};
-
-},{"74607922ed30019f":"gM5ar"}],"gM5ar":[function(require,module,exports) {
-"use strict";
-// we can't use just `it == null` since of `document.all` special case
-// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
-module.exports = function(it) {
-    return it === null || it === undefined;
-};
-
-},{}],"9TrPc":[function(require,module,exports) {
-"use strict";
-var wellKnownSymbol = require("2e34ececd06658d9");
-exports.f = wellKnownSymbol;
-
-},{"2e34ececd06658d9":"gTwyA"}],"gTwyA":[function(require,module,exports) {
-"use strict";
-var global = require("dbe74e87464035e3");
-var shared = require("6a2cda01df6b4c79");
-var hasOwn = require("dccc28ffa5beeb54");
-var uid = require("48d6af1225853d44");
-var NATIVE_SYMBOL = require("9f762329148684");
-var USE_SYMBOL_AS_UID = require("1ce268781e409df2");
-var Symbol = global.Symbol;
-var WellKnownSymbolsStore = shared("wks");
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol["for"] || Symbol : Symbol && Symbol.withoutSetter || uid;
-module.exports = function(name) {
-    if (!hasOwn(WellKnownSymbolsStore, name)) WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name) ? Symbol[name] : createWellKnownSymbol("Symbol." + name);
-    return WellKnownSymbolsStore[name];
-};
-
-},{"dbe74e87464035e3":"i8HOC","6a2cda01df6b4c79":"i1mHK","dccc28ffa5beeb54":"gC2Q5","48d6af1225853d44":"a3SEE","9f762329148684":"8KyTD","1ce268781e409df2":"2Ye8Q"}],"i1mHK":[function(require,module,exports) {
-"use strict";
-var IS_PURE = require("fe5f96cb4b2826a2");
-var store = require("84eeed9891aafe14");
-(module.exports = function(key, value) {
-    return store[key] || (store[key] = value !== undefined ? value : {});
-})("versions", []).push({
-    version: "3.33.0",
-    mode: IS_PURE ? "pure" : "global",
-    copyright: "\xa9 2014-2023 Denis Pushkarev (zloirock.ru)",
-    license: "https://github.com/zloirock/core-js/blob/v3.33.0/LICENSE",
-    source: "https://github.com/zloirock/core-js"
-});
-
-},{"fe5f96cb4b2826a2":"5ZsyC","84eeed9891aafe14":"l4ncH"}],"5ZsyC":[function(require,module,exports) {
-"use strict";
-module.exports = false;
-
-},{}],"l4ncH":[function(require,module,exports) {
-"use strict";
-var global = require("8756de416b94afec");
-var defineGlobalProperty = require("dfb72a1d809f7b02");
-var SHARED = "__core-js_shared__";
-var store = global[SHARED] || defineGlobalProperty(SHARED, {});
-module.exports = store;
-
-},{"8756de416b94afec":"i8HOC","dfb72a1d809f7b02":"ggjnO"}],"ggjnO":[function(require,module,exports) {
-"use strict";
-var global = require("70259c1dd4aa0e14");
-// eslint-disable-next-line es/no-object-defineproperty -- safe
-var defineProperty = Object.defineProperty;
-module.exports = function(key, value) {
+const getJSON = async function(url) {
     try {
-        defineProperty(global, key, {
-            value: value,
-            configurable: true,
-            writable: true
-        });
-    } catch (error) {
-        global[key] = value;
+        // A race between timeout promise and fetch function, whatever occurs first wins the race
+        const fetchPro = fetch(url);
+        const res = await Promise.race([
+            fetchPro,
+            timeout((0, _configJs.TIMEOUT_SEC))
+        ]);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        return data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs"}],"l60JC":[function(require,module,exports) {
+// import icons from '../img/icons.svg'; - Parcel 1
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parcel 2
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+var _fractional = require("fractional"); // this is an npm package (npm install fractional) to implement a functionality that we dont want to to implement ourselves - formatting quantities
+class RecipeView {
+    #parentElement = document.querySelector(".recipe");
+    #data;
+    #errorMessage = "We could no tfind that recipe. Please try another one!";
+    #message = "";
+    render(data) {
+        this.#data = data;
+        const markup = this.#generateMarkup();
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    #clear() {
+        this.#parentElement.innerHTML = "";
+    }
+    renderSpinner() {
+        const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+      </svg>
+    </div>
+  `;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderError(message = this.#errorMessage) {
+        const markup = `
+    <div class="error">
+     <div>
+       <svg>
+         <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+       </svg>
+     </div>
+     <p>${message}</p>
+   </div>`;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this.#message) {
+        const markup = `
+    <div class="message">
+     <div>
+       <svg>
+         <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+       </svg>
+     </div>
+     <p>${message}</p>
+   </div>`;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    // This method, which is publisher - needs to get access to the subscriber (controlRecipes) - this is in init fn in controller.js
+    addHandlerRender(handler) {
+        // Change the hash
+        window.addEventListener("hashchange", handler);
+        // Load the page
+        window.addEventListener("load", handler);
+    // To avoid duplicate code above, we use, but it is not working for me
+    // ['haschange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+    }
+    #generateMarkup() {
+        return `
+    <figure class="recipe__fig">
+    <img src="${this.#data.image}" alt="${this.#data.title}" class="recipe__img" />
+    <h1 class="recipe__title">
+      <span>${this.#data.title}</span>
+    </h1>
+  </figure>
+
+  <div class="recipe__details">
+    <div class="recipe__info">
+      <svg class="recipe__info-icon">
+        <use href="${0, _iconsSvgDefault.default}#icon-clock"></use>
+      </svg>
+      <span class="recipe__info-data recipe__info-data--minutes">${this.#data.cookingTime}</span>
+      <span class="recipe__info-text">minutes</span>
+    </div>
+    <div class="recipe__info">
+      <svg class="recipe__info-icon">
+        <use href="${0, _iconsSvgDefault.default}#icon-users"></use>
+      </svg>
+      <span class="recipe__info-data recipe__info-data--people">${this.#data.servings}</span>
+      <span class="recipe__info-text">servings</span>
+
+      <div class="recipe__info-buttons">
+        <button class="btn--tiny btn--increase-servings">
+          <svg>
+            <use href="${0, _iconsSvgDefault.default}#icon-minus-circle"></use>
+          </svg>
+        </button>
+        <button class="btn--tiny btn--increase-servings">
+          <svg>
+            <use href="${0, _iconsSvgDefault.default}#icon-plus-circle"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="recipe__user-generated">
+      <svg>
+        <use href="${0, _iconsSvgDefault.default}#icon-user"></use>
+      </svg>
+    </div>
+    <button class="btn--round">
+      <svg class="">
+        <use href="${0, _iconsSvgDefault.default}#icon-bookmark-fill"></use>
+      </svg>
+    </button>
+  </div>
+
+  <div class="recipe__ingredients">
+    <h2 class="heading--2">Recipe ingredients</h2>
+    <ul class="recipe__ingredient-list">
+
+    ${this.#data.ingredients.map(this.#generateMarkupIngredient).join("")}
+    </ul>
+  </div>
+
+  <div class="recipe__directions">
+    <h2 class="heading--2">How to cook it</h2>
+    <p class="recipe__directions-text">
+      This recipe was carefully designed and tested by
+      <span class="recipe__publisher">${this.#data.publisher}</span>. Please check out
+      directions at their website.
+    </p>
+    <a
+      class="btn--small recipe__btn"
+      href="${this.#data.sourceUrl}"
+      target="_blank"
+    >
+      <span>Directions</span>
+      <svg class="search__icon">
+        <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+      </svg>
+    </a>
+  </div>
+    `;
+    }
+    #generateMarkupIngredient(ing) {
+        return ` 
+    <li class="recipe__ingredient">
+    <svg class="recipe__icon">
+      <use href="${0, _iconsSvgDefault.default}#icon-check"></use>
+    </svg>
+    <div class="recipe__quantity">${ing.quantity ? new (0, _fractional.Fraction)(ing.quantity).toString() : ""}</div>
+    <div class="recipe__description">
+      <span class="recipe__unit">${ing.unit}</span>
+      ${ing.description}
+    </div>
+  </li>
+    `;
+    }
+}
+exports.default = new RecipeView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp","fractional":"3SU56"}],"loVOp":[function(require,module,exports) {
+module.exports = require("9bcc84ee5d265e38").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
+
+},{"9bcc84ee5d265e38":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
     }
     return value;
-};
-
-},{"70259c1dd4aa0e14":"i8HOC"}],"a3SEE":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("5da0fe4507da20a3");
-var id = 0;
-var postfix = Math.random();
-var toString = uncurryThis(1.0.toString);
-module.exports = function(key) {
-    return "Symbol(" + (key === undefined ? "" : key) + ")_" + toString(++id + postfix, 36);
-};
-
-},{"5da0fe4507da20a3":"7GlkT"}],"8KyTD":[function(require,module,exports) {
-"use strict";
-/* eslint-disable es/no-symbol -- required for testing */ var V8_VERSION = require("ecc4d354cb42bea8");
-var fails = require("b37df495bcdc1d99");
-var global = require("d8adff9188ad5fee");
-var $String = global.String;
-// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
-module.exports = !!Object.getOwnPropertySymbols && !fails(function() {
-    var symbol = Symbol("symbol detection");
-    // Chrome 38 Symbol has incorrect toString conversion
-    // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
-    // nb: Do not call `String` directly to avoid this being optimized out to `symbol+''` which will,
-    // of course, fail.
-    return !$String(symbol) || !(Object(symbol) instanceof Symbol) || // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
-    !Symbol.sham && V8_VERSION && V8_VERSION < 41;
-});
-
-},{"ecc4d354cb42bea8":"bjFlO","b37df495bcdc1d99":"hL6D2","d8adff9188ad5fee":"i8HOC"}],"bjFlO":[function(require,module,exports) {
-"use strict";
-var global = require("705d79ce07ed8cf");
-var userAgent = require("5afb83a49cd74e4c");
-var process = global.process;
-var Deno = global.Deno;
-var versions = process && process.versions || Deno && Deno.version;
-var v8 = versions && versions.v8;
-var match, version;
-if (v8) {
-    match = v8.split(".");
-    // in old Chrome, versions of V8 isn't V8 = Chrome / 10
-    // but their correct versions are not interesting for us
-    version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]);
 }
-// BrowserFS NodeJS `process` polyfill incorrectly set `.v8` to `0.0`
-// so check `userAgent` even if `.v8` exists, but 0
-if (!version && userAgent) {
-    match = userAgent.match(/Edge\/(\d+)/);
-    if (!match || match[1] >= 74) {
-        match = userAgent.match(/Chrome\/(\d+)/);
-        if (match) version = +match[1];
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
     }
+    return "/";
 }
-module.exports = version;
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
 
-},{"705d79ce07ed8cf":"i8HOC","5afb83a49cd74e4c":"73xBt"}],"73xBt":[function(require,module,exports) {
-"use strict";
-module.exports = typeof navigator != "undefined" && String(navigator.userAgent) || "";
+},{}],"3SU56":[function(require,module,exports) {
+/*
+fraction.js
+A Javascript fraction library.
 
-},{}],"2Ye8Q":[function(require,module,exports) {
-"use strict";
-/* eslint-disable es/no-symbol -- required for testing */ var NATIVE_SYMBOL = require("da4a972af0214ea0");
-module.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == "symbol";
+Copyright (c) 2009  Erik Garrison <erik@hypervolu.me>
 
-},{"da4a972af0214ea0":"8KyTD"}],"iJR4w":[function(require,module,exports) {
-"use strict";
-var DESCRIPTORS = require("ca50eb9163928400");
-var IE8_DOM_DEFINE = require("d482f9e5478795e8");
-var V8_PROTOTYPE_DEFINE_BUG = require("b6ad7537efb06f4b");
-var anObject = require("16365a73399e7fe7");
-var toPropertyKey = require("fab1d366c47796d9");
-var $TypeError = TypeError;
-// eslint-disable-next-line es/no-object-defineproperty -- safe
-var $defineProperty = Object.defineProperty;
-// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var ENUMERABLE = "enumerable";
-var CONFIGURABLE = "configurable";
-var WRITABLE = "writable";
-// `Object.defineProperty` method
-// https://tc39.es/ecma262/#sec-object.defineproperty
-exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P, Attributes) {
-    anObject(O);
-    P = toPropertyKey(P);
-    anObject(Attributes);
-    if (typeof O === "function" && P === "prototype" && "value" in Attributes && WRITABLE in Attributes && !Attributes[WRITABLE]) {
-        var current = $getOwnPropertyDescriptor(O, P);
-        if (current && current[WRITABLE]) {
-            O[P] = Attributes.value;
-            Attributes = {
-                configurable: CONFIGURABLE in Attributes ? Attributes[CONFIGURABLE] : current[CONFIGURABLE],
-                enumerable: ENUMERABLE in Attributes ? Attributes[ENUMERABLE] : current[ENUMERABLE],
-                writable: false
-            };
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/ /* Fractions */ /* 
+ *
+ * Fraction objects are comprised of a numerator and a denomenator.  These
+ * values can be accessed at fraction.numerator and fraction.denomenator.
+ *
+ * Fractions are always returned and stored in lowest-form normalized format.
+ * This is accomplished via Fraction.normalize.
+ *
+ * The following mathematical operations on fractions are supported:
+ *
+ * Fraction.equals
+ * Fraction.add
+ * Fraction.subtract
+ * Fraction.multiply
+ * Fraction.divide
+ *
+ * These operations accept both numbers and fraction objects.  (Best results
+ * are guaranteed when the input is a fraction object.)  They all return a new
+ * Fraction object.
+ *
+ * Usage:
+ *
+ * TODO
+ *
+ */ /*
+ * The Fraction constructor takes one of:
+ *   an explicit numerator (integer) and denominator (integer),
+ *   a string representation of the fraction (string),
+ *   or a floating-point number (float)
+ *
+ * These initialization methods are provided for convenience.  Because of
+ * rounding issues the best results will be given when the fraction is
+ * constructed from an explicit integer numerator and denomenator, and not a
+ * decimal number.
+ *
+ *
+ * e.g. new Fraction(1, 2) --> 1/2
+ *      new Fraction('1/2') --> 1/2
+ *      new Fraction('2 3/4') --> 11/4  (prints as 2 3/4)
+ *
+ */ Fraction = function(numerator, denominator) {
+    /* double argument invocation */ if (typeof numerator !== "undefined" && denominator) {
+        if (typeof numerator === "number" && typeof denominator === "number") {
+            this.numerator = numerator;
+            this.denominator = denominator;
+        } else if (typeof numerator === "string" && typeof denominator === "string") {
+            // what are they?
+            // hmm....
+            // assume they are ints?
+            this.numerator = parseInt(numerator);
+            this.denominator = parseInt(denominator);
+        }
+    /* single-argument invocation */ } else if (typeof denominator === "undefined") {
+        num = numerator; // swap variable names for legibility
+        if (typeof num === "number") {
+            this.numerator = num;
+            this.denominator = 1;
+        } else if (typeof num === "string") {
+            var a, b; // hold the first and second part of the fraction, e.g. a = '1' and b = '2/3' in 1 2/3
+            // or a = '2/3' and b = undefined if we are just passed a single-part number
+            var arr = num.split(" ");
+            if (arr[0]) a = arr[0];
+            if (arr[1]) b = arr[1];
+            /* compound fraction e.g. 'A B/C' */ //  if a is an integer ...
+            if (a % 1 === 0 && b && b.match("/")) return new Fraction(a).add(new Fraction(b));
+            else if (a && !b) {
+                /* simple fraction e.g. 'A/B' */ if (typeof a === "string" && a.match("/")) {
+                    // it's not a whole number... it's actually a fraction without a whole part written
+                    var f = a.split("/");
+                    this.numerator = f[0];
+                    this.denominator = f[1];
+                /* string floating point */ } else if (typeof a === "string" && a.match(".")) return new Fraction(parseFloat(a));
+                else {
+                    this.numerator = parseInt(a);
+                    this.denominator = 1;
+                }
+            } else return undefined; // could not parse
         }
     }
-    return $defineProperty(O, P, Attributes);
-} : $defineProperty : function defineProperty(O, P, Attributes) {
+    this.normalize();
+};
+Fraction.prototype.clone = function() {
+    return new Fraction(this.numerator, this.denominator);
+};
+/* pretty-printer, converts fractions into whole numbers and fractions */ Fraction.prototype.toString = function() {
+    if (this.denominator === "NaN") return "NaN";
+    var wholepart = this.numerator / this.denominator > 0 ? Math.floor(this.numerator / this.denominator) : Math.ceil(this.numerator / this.denominator);
+    var numerator = this.numerator % this.denominator;
+    var denominator = this.denominator;
+    var result = [];
+    if (wholepart != 0) result.push(wholepart);
+    if (numerator != 0) result.push((wholepart === 0 ? numerator : Math.abs(numerator)) + "/" + denominator);
+    return result.length > 0 ? result.join(" ") : 0;
+};
+/* destructively rescale the fraction by some integral factor */ Fraction.prototype.rescale = function(factor) {
+    this.numerator *= factor;
+    this.denominator *= factor;
+    return this;
+};
+Fraction.prototype.add = function(b) {
+    var a = this.clone();
+    if (b instanceof Fraction) b = b.clone();
+    else b = new Fraction(b);
+    td = a.denominator;
+    a.rescale(b.denominator);
+    b.rescale(td);
+    a.numerator += b.numerator;
+    return a.normalize();
+};
+Fraction.prototype.subtract = function(b) {
+    var a = this.clone();
+    if (b instanceof Fraction) b = b.clone(); // we scale our argument destructively, so clone
+    else b = new Fraction(b);
+    td = a.denominator;
+    a.rescale(b.denominator);
+    b.rescale(td);
+    a.numerator -= b.numerator;
+    return a.normalize();
+};
+Fraction.prototype.multiply = function(b) {
+    var a = this.clone();
+    if (b instanceof Fraction) {
+        a.numerator *= b.numerator;
+        a.denominator *= b.denominator;
+    } else if (typeof b === "number") a.numerator *= b;
+    else return a.multiply(new Fraction(b));
+    return a.normalize();
+};
+Fraction.prototype.divide = function(b) {
+    var a = this.clone();
+    if (b instanceof Fraction) {
+        a.numerator *= b.denominator;
+        a.denominator *= b.numerator;
+    } else if (typeof b === "number") a.denominator *= b;
+    else return a.divide(new Fraction(b));
+    return a.normalize();
+};
+Fraction.prototype.equals = function(b) {
+    if (!(b instanceof Fraction)) b = new Fraction(b);
+    // fractions that are equal should have equal normalized forms
+    var a = this.clone().normalize();
+    var b = b.clone().normalize();
+    return a.numerator === b.numerator && a.denominator === b.denominator;
+};
+/* Utility functions */ /* Destructively normalize the fraction to its smallest representation. 
+ * e.g. 4/16 -> 1/4, 14/28 -> 1/2, etc.
+ * This is called after all math ops.
+ */ Fraction.prototype.normalize = function() {
+    var isFloat = function(n) {
+        return typeof n === "number" && (n > 0 && n % 1 > 0 && n % 1 < 1 || n < 0 && n % -1 < 0 && n % -1 > -1);
+    };
+    var roundToPlaces = function(n, places) {
+        if (!places) return Math.round(n);
+        else {
+            var scalar = Math.pow(10, places);
+            return Math.round(n * scalar) / scalar;
+        }
+    };
+    return function() {
+        // XXX hackish.  Is there a better way to address this issue?
+        //
+        /* first check if we have decimals, and if we do eliminate them
+         * multiply by the 10 ^ number of decimal places in the number
+         * round the number to nine decimal places
+         * to avoid js floating point funnies
+         */ if (isFloat(this.denominator)) {
+            var rounded = roundToPlaces(this.denominator, 9);
+            var scaleup = Math.pow(10, rounded.toString().split(".")[1].length);
+            this.denominator = Math.round(this.denominator * scaleup); // this !!! should be a whole number
+            //this.numerator *= scaleup;
+            this.numerator *= scaleup;
+        }
+        if (isFloat(this.numerator)) {
+            var rounded = roundToPlaces(this.numerator, 9);
+            var scaleup = Math.pow(10, rounded.toString().split(".")[1].length);
+            this.numerator = Math.round(this.numerator * scaleup); // this !!! should be a whole number
+            //this.numerator *= scaleup;
+            this.denominator *= scaleup;
+        }
+        var gcf = Fraction.gcf(this.numerator, this.denominator);
+        this.numerator /= gcf;
+        this.denominator /= gcf;
+        if (this.numerator < 0 && this.denominator < 0 || this.numerator > 0 && this.denominator < 0) {
+            this.numerator *= -1;
+            this.denominator *= -1;
+        }
+        return this;
+    };
+}();
+/* Takes two numbers and returns their greatest common factor.
+ */ Fraction.gcf = function(a, b) {
+    var common_factors = [];
+    var fa = Fraction.primeFactors(a);
+    var fb = Fraction.primeFactors(b);
+    // for each factor in fa
+    // if it's also in fb
+    // put it into the common factors
+    fa.forEach(function(factor) {
+        var i = fb.indexOf(factor);
+        if (i >= 0) {
+            common_factors.push(factor);
+            fb.splice(i, 1); // remove from fb
+        }
+    });
+    if (common_factors.length === 0) return 1;
+    var gcf = function() {
+        var r = common_factors[0];
+        var i;
+        for(i = 1; i < common_factors.length; i++)r = r * common_factors[i];
+        return r;
+    }();
+    return gcf;
+};
+// Adapted from: 
+// http://www.btinternet.com/~se16/js/factor.htm
+Fraction.primeFactors = function(n) {
+    var num1 = Math.abs(n);
+    var factors = [];
+    var _factor = 2; // first potential prime factor
+    while(_factor * _factor <= num1)if (num1 % _factor === 0) {
+        factors.push(_factor); // so keep it
+        num1 = num1 / _factor; // and divide our search point by it
+    } else _factor++; // and increment
+    if (num1 != 1) factors.push(num1); //    so it too should be recorded
+    return factors; // Return the prime factors
+};
+module.exports.Fraction = Fraction;
+
+},{}],"49tUX":[function(require,module,exports) {
+var $export = require("af507ce87e41a20c");
+var $task = require("f3e37c42365e6105");
+$export($export.G + $export.B, {
+    setImmediate: $task.set,
+    clearImmediate: $task.clear
+});
+
+},{"af507ce87e41a20c":"1Tgvm","f3e37c42365e6105":"bPiT9"}],"1Tgvm":[function(require,module,exports) {
+var global = require("42f6b821d919e9e3");
+var core = require("c78b0a9a56aa2fa8");
+var hide = require("31d57f90251ab520");
+var redefine = require("ced7c23f8cd6b0bf");
+var ctx = require("242cc4d0fd4e0ba");
+var PROTOTYPE = "prototype";
+var $export = function(type, name, source) {
+    var IS_FORCED = type & $export.F;
+    var IS_GLOBAL = type & $export.G;
+    var IS_STATIC = type & $export.S;
+    var IS_PROTO = type & $export.P;
+    var IS_BIND = type & $export.B;
+    var target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE];
+    var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+    var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
+    var key, own, out, exp;
+    if (IS_GLOBAL) source = name;
+    for(key in source){
+        // contains in native
+        own = !IS_FORCED && target && target[key] !== undefined;
+        // export native or passed
+        out = (own ? target : source)[key];
+        // bind timers to global for call from export context
+        exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && typeof out == "function" ? ctx(Function.call, out) : out;
+        // extend global
+        if (target) redefine(target, key, out, type & $export.U);
+        // export
+        if (exports[key] != out) hide(exports, key, exp);
+        if (IS_PROTO && expProto[key] != out) expProto[key] = out;
+    }
+};
+global.core = core;
+// type bitmap
+$export.F = 1; // forced
+$export.G = 2; // global
+$export.S = 4; // static
+$export.P = 8; // proto
+$export.B = 16; // bind
+$export.W = 32; // wrap
+$export.U = 64; // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+},{"42f6b821d919e9e3":"8xCse","c78b0a9a56aa2fa8":"4o9Ko","31d57f90251ab520":"ddpVq","ced7c23f8cd6b0bf":"9vAu7","242cc4d0fd4e0ba":"4rQSm"}],"8xCse":[function(require,module,exports) {
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != "undefined" && window.Math == Math ? window : typeof self != "undefined" && self.Math == Math ? self : Function("return this")();
+if (typeof __g == "number") __g = global; // eslint-disable-line no-undef
+
+},{}],"4o9Ko":[function(require,module,exports) {
+var core = module.exports = {
+    version: "2.5.7"
+};
+if (typeof __e == "number") __e = core; // eslint-disable-line no-undef
+
+},{}],"ddpVq":[function(require,module,exports) {
+var dP = require("d8943525bab1b2ec");
+var createDesc = require("25bf6cacb7cbb32e");
+module.exports = require("2ee055831716c8bb") ? function(object, key, value) {
+    return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value) {
+    object[key] = value;
+    return object;
+};
+
+},{"d8943525bab1b2ec":"cLcWd","25bf6cacb7cbb32e":"825qY","2ee055831716c8bb":"dr2tY"}],"cLcWd":[function(require,module,exports) {
+var anObject = require("b930f648b0f27382");
+var IE8_DOM_DEFINE = require("f0c219e68320c9ed");
+var toPrimitive = require("c690e12f2fe9bab0");
+var dP = Object.defineProperty;
+exports.f = require("1bceab5c9179ba04") ? Object.defineProperty : function defineProperty(O, P, Attributes) {
     anObject(O);
-    P = toPropertyKey(P);
+    P = toPrimitive(P, true);
     anObject(Attributes);
     if (IE8_DOM_DEFINE) try {
-        return $defineProperty(O, P, Attributes);
-    } catch (error) {}
-    if ("get" in Attributes || "set" in Attributes) throw new $TypeError("Accessors not supported");
+        return dP(O, P, Attributes);
+    } catch (e) {}
+    if ("get" in Attributes || "set" in Attributes) throw TypeError("Accessors not supported!");
     if ("value" in Attributes) O[P] = Attributes.value;
     return O;
 };
 
-},{"ca50eb9163928400":"92ZIi","d482f9e5478795e8":"qS9uN","b6ad7537efb06f4b":"ka1Un","16365a73399e7fe7":"4isCr","fab1d366c47796d9":"5XWKd"}],"92ZIi":[function(require,module,exports) {
-"use strict";
-var fails = require("735b783268fd06c0");
-// Detect IE8's incomplete defineProperty implementation
-module.exports = !fails(function() {
-    // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-    return Object.defineProperty({}, 1, {
-        get: function() {
-            return 7;
-        }
-    })[1] !== 7;
-});
-
-},{"735b783268fd06c0":"hL6D2"}],"qS9uN":[function(require,module,exports) {
-"use strict";
-var DESCRIPTORS = require("9b4278b13c076bf");
-var fails = require("8aee5d88a5f9b6b5");
-var createElement = require("1db4d60148afcf21");
-// Thanks to IE8 for its funny defineProperty
-module.exports = !DESCRIPTORS && !fails(function() {
-    // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-    return Object.defineProperty(createElement("div"), "a", {
-        get: function() {
-            return 7;
-        }
-    }).a !== 7;
-});
-
-},{"9b4278b13c076bf":"92ZIi","8aee5d88a5f9b6b5":"hL6D2","1db4d60148afcf21":"4bOHl"}],"4bOHl":[function(require,module,exports) {
-"use strict";
-var global = require("f5891d48afd7ec83");
-var isObject = require("824df78b2e007250");
-var document = global.document;
-// typeof document.createElement is 'object' in old IE
-var EXISTS = isObject(document) && isObject(document.createElement);
+},{"b930f648b0f27382":"kiL2X","f0c219e68320c9ed":"cIJOj","c690e12f2fe9bab0":"4Oubb","1bceab5c9179ba04":"dr2tY"}],"kiL2X":[function(require,module,exports) {
+var isObject = require("56587b8863452108");
 module.exports = function(it) {
-    return EXISTS ? document.createElement(it) : {};
+    if (!isObject(it)) throw TypeError(it + " is not an object!");
+    return it;
 };
 
-},{"f5891d48afd7ec83":"i8HOC","824df78b2e007250":"Z0pBo"}],"Z0pBo":[function(require,module,exports) {
-"use strict";
-var isCallable = require("f87cee1cb79cbcca");
-var $documentAll = require("319a7447e596d6da");
-var documentAll = $documentAll.all;
-module.exports = $documentAll.IS_HTMLDDA ? function(it) {
-    return typeof it == "object" ? it !== null : isCallable(it) || it === documentAll;
-} : function(it) {
-    return typeof it == "object" ? it !== null : isCallable(it);
+},{"56587b8863452108":"eIE5K"}],"eIE5K":[function(require,module,exports) {
+module.exports = function(it) {
+    return typeof it === "object" ? it !== null : typeof it === "function";
 };
 
-},{"f87cee1cb79cbcca":"l3Kyn","319a7447e596d6da":"5MHqB"}],"l3Kyn":[function(require,module,exports) {
-"use strict";
-var $documentAll = require("ca3b3b4ae4b8328f");
-var documentAll = $documentAll.all;
-// `IsCallable` abstract operation
-// https://tc39.es/ecma262/#sec-iscallable
-module.exports = $documentAll.IS_HTMLDDA ? function(argument) {
-    return typeof argument == "function" || argument === documentAll;
-} : function(argument) {
-    return typeof argument == "function";
-};
-
-},{"ca3b3b4ae4b8328f":"5MHqB"}],"5MHqB":[function(require,module,exports) {
-"use strict";
-var documentAll = typeof document == "object" && document.all;
-// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
-// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
-var IS_HTMLDDA = typeof documentAll == "undefined" && documentAll !== undefined;
-module.exports = {
-    all: documentAll,
-    IS_HTMLDDA: IS_HTMLDDA
-};
-
-},{}],"ka1Un":[function(require,module,exports) {
-"use strict";
-var DESCRIPTORS = require("b22a5a2de93e3ad2");
-var fails = require("249a5b857c2dfccd");
-// V8 ~ Chrome 36-
-// https://bugs.chromium.org/p/v8/issues/detail?id=3334
-module.exports = DESCRIPTORS && fails(function() {
-    // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-    return Object.defineProperty(function() {}, "prototype", {
-        value: 42,
-        writable: false
-    }).prototype !== 42;
+},{}],"cIJOj":[function(require,module,exports) {
+module.exports = !require("a100528cf6641f10") && !require("ae70d15ac8e4b8ac")(function() {
+    return Object.defineProperty(require("e10245d0320221b6")("div"), "a", {
+        get: function() {
+            return 7;
+        }
+    }).a != 7;
 });
 
-},{"b22a5a2de93e3ad2":"92ZIi","249a5b857c2dfccd":"hL6D2"}],"4isCr":[function(require,module,exports) {
-"use strict";
-var isObject = require("2b6c6258a0a6082f");
-var $String = String;
-var $TypeError = TypeError;
-// `Assert: Type(argument) is Object`
-module.exports = function(argument) {
-    if (isObject(argument)) return argument;
-    throw new $TypeError($String(argument) + " is not an object");
-};
+},{"a100528cf6641f10":"dr2tY","ae70d15ac8e4b8ac":"iAFH1","e10245d0320221b6":"2qBag"}],"dr2tY":[function(require,module,exports) {
+// Thank's IE8 for his funny defineProperty
+module.exports = !require("c3ddebb06976432e")(function() {
+    return Object.defineProperty({}, "a", {
+        get: function() {
+            return 7;
+        }
+    }).a != 7;
+});
 
-},{"2b6c6258a0a6082f":"Z0pBo"}],"5XWKd":[function(require,module,exports) {
-"use strict";
-var toPrimitive = require("53a3a67ac381c4e8");
-var isSymbol = require("b992ca9cdcf7937b");
-// `ToPropertyKey` abstract operation
-// https://tc39.es/ecma262/#sec-topropertykey
-module.exports = function(argument) {
-    var key = toPrimitive(argument, "string");
-    return isSymbol(key) ? key : key + "";
-};
-
-},{"53a3a67ac381c4e8":"a2mK1","b992ca9cdcf7937b":"4aV4F"}],"a2mK1":[function(require,module,exports) {
-"use strict";
-var call = require("70235907dc93b4b0");
-var isObject = require("46fb53dace408c8e");
-var isSymbol = require("677bdc4d74d2f983");
-var getMethod = require("80395bcde336a28b");
-var ordinaryToPrimitive = require("49552a7324952190");
-var wellKnownSymbol = require("aea01c71276624bf");
-var $TypeError = TypeError;
-var TO_PRIMITIVE = wellKnownSymbol("toPrimitive");
-// `ToPrimitive` abstract operation
-// https://tc39.es/ecma262/#sec-toprimitive
-module.exports = function(input, pref) {
-    if (!isObject(input) || isSymbol(input)) return input;
-    var exoticToPrim = getMethod(input, TO_PRIMITIVE);
-    var result;
-    if (exoticToPrim) {
-        if (pref === undefined) pref = "default";
-        result = call(exoticToPrim, input, pref);
-        if (!isObject(result) || isSymbol(result)) return result;
-        throw new $TypeError("Can't convert object to primitive value");
-    }
-    if (pref === undefined) pref = "number";
-    return ordinaryToPrimitive(input, pref);
-};
-
-},{"70235907dc93b4b0":"d7JlP","46fb53dace408c8e":"Z0pBo","677bdc4d74d2f983":"4aV4F","80395bcde336a28b":"9Zfiw","49552a7324952190":"7MME2","aea01c71276624bf":"gTwyA"}],"d7JlP":[function(require,module,exports) {
-"use strict";
-var NATIVE_BIND = require("44e025d030d66023");
-var call = Function.prototype.call;
-module.exports = NATIVE_BIND ? call.bind(call) : function() {
-    return call.apply(call, arguments);
-};
-
-},{"44e025d030d66023":"i16Dq"}],"4aV4F":[function(require,module,exports) {
-"use strict";
-var getBuiltIn = require("6b6c481cdfb7df35");
-var isCallable = require("2af44fcbdbf14c83");
-var isPrototypeOf = require("76e903e830c40e7c");
-var USE_SYMBOL_AS_UID = require("7e2fe930b3598e22");
-var $Object = Object;
-module.exports = USE_SYMBOL_AS_UID ? function(it) {
-    return typeof it == "symbol";
-} : function(it) {
-    var $Symbol = getBuiltIn("Symbol");
-    return isCallable($Symbol) && isPrototypeOf($Symbol.prototype, $Object(it));
-};
-
-},{"6b6c481cdfb7df35":"6ZUSY","2af44fcbdbf14c83":"l3Kyn","76e903e830c40e7c":"3jtKQ","7e2fe930b3598e22":"2Ye8Q"}],"6ZUSY":[function(require,module,exports) {
-"use strict";
-var global = require("dd9e9ae04e8684f7");
-var isCallable = require("f1d62079325906cb");
-var aFunction = function(argument) {
-    return isCallable(argument) ? argument : undefined;
-};
-module.exports = function(namespace, method) {
-    return arguments.length < 2 ? aFunction(global[namespace]) : global[namespace] && global[namespace][method];
-};
-
-},{"dd9e9ae04e8684f7":"i8HOC","f1d62079325906cb":"l3Kyn"}],"3jtKQ":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("83f14842ef67e16a");
-module.exports = uncurryThis({}.isPrototypeOf);
-
-},{"83f14842ef67e16a":"7GlkT"}],"9Zfiw":[function(require,module,exports) {
-"use strict";
-var aCallable = require("bbfed17b24e215f4");
-var isNullOrUndefined = require("492a86e2970f6a26");
-// `GetMethod` abstract operation
-// https://tc39.es/ecma262/#sec-getmethod
-module.exports = function(V, P) {
-    var func = V[P];
-    return isNullOrUndefined(func) ? undefined : aCallable(func);
-};
-
-},{"bbfed17b24e215f4":"gOMir","492a86e2970f6a26":"gM5ar"}],"gOMir":[function(require,module,exports) {
-"use strict";
-var isCallable = require("4094667126ecac05");
-var tryToString = require("fce2a7573db493fa");
-var $TypeError = TypeError;
-// `Assert: IsCallable(argument) is true`
-module.exports = function(argument) {
-    if (isCallable(argument)) return argument;
-    throw new $TypeError(tryToString(argument) + " is not a function");
-};
-
-},{"4094667126ecac05":"l3Kyn","fce2a7573db493fa":"4O7d7"}],"4O7d7":[function(require,module,exports) {
-"use strict";
-var $String = String;
-module.exports = function(argument) {
+},{"c3ddebb06976432e":"iAFH1"}],"iAFH1":[function(require,module,exports) {
+module.exports = function(exec) {
     try {
-        return $String(argument);
-    } catch (error) {
-        return "Object";
+        return !!exec();
+    } catch (e) {
+        return true;
     }
 };
 
-},{}],"7MME2":[function(require,module,exports) {
-"use strict";
-var call = require("abe9ca006f56626e");
-var isCallable = require("c96b3a89fec6248a");
-var isObject = require("551615fda0214f1b");
-var $TypeError = TypeError;
-// `OrdinaryToPrimitive` abstract operation
-// https://tc39.es/ecma262/#sec-ordinarytoprimitive
-module.exports = function(input, pref) {
+},{}],"2qBag":[function(require,module,exports) {
+var isObject = require("f5128ecc02fb78bd");
+var document = require("e008eb78a0a4d5d9").document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function(it) {
+    return is ? document.createElement(it) : {};
+};
+
+},{"f5128ecc02fb78bd":"eIE5K","e008eb78a0a4d5d9":"8xCse"}],"4Oubb":[function(require,module,exports) {
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require("c2dffef8c8a7e11e");
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S) {
+    if (!isObject(it)) return it;
     var fn, val;
-    if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
-    if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
-    if (pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
-    throw new $TypeError("Can't convert object to primitive value");
+    if (S && typeof (fn = it.toString) == "function" && !isObject(val = fn.call(it))) return val;
+    if (typeof (fn = it.valueOf) == "function" && !isObject(val = fn.call(it))) return val;
+    if (!S && typeof (fn = it.toString) == "function" && !isObject(val = fn.call(it))) return val;
+    throw TypeError("Can't convert object to primitive value");
 };
 
-},{"abe9ca006f56626e":"d7JlP","c96b3a89fec6248a":"l3Kyn","551615fda0214f1b":"Z0pBo"}],"lk5NI":[function(require,module,exports) {
-"use strict";
-var DESCRIPTORS = require("c04e6fb248689dba");
-var call = require("553ec943aa2a4554");
-var propertyIsEnumerableModule = require("bbc5e69071aa2fbd");
-var createPropertyDescriptor = require("1d2ffbfd99e01f41");
-var toIndexedObject = require("c4ea69a78a643d87");
-var toPropertyKey = require("8ab18ff766aa2ab9");
-var hasOwn = require("3761c5d34b7aa48f");
-var IE8_DOM_DEFINE = require("c4dfcc26308f1b4a");
-// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-// `Object.getOwnPropertyDescriptor` method
-// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
-    O = toIndexedObject(O);
-    P = toPropertyKey(P);
-    if (IE8_DOM_DEFINE) try {
-        return $getOwnPropertyDescriptor(O, P);
-    } catch (error) {}
-    if (hasOwn(O, P)) return createPropertyDescriptor(!call(propertyIsEnumerableModule.f, O, P), O[P]);
-};
-
-},{"c04e6fb248689dba":"92ZIi","553ec943aa2a4554":"d7JlP","bbc5e69071aa2fbd":"7SuiS","1d2ffbfd99e01f41":"1lpav","c4ea69a78a643d87":"jLWwQ","8ab18ff766aa2ab9":"5XWKd","3761c5d34b7aa48f":"gC2Q5","c4dfcc26308f1b4a":"qS9uN"}],"7SuiS":[function(require,module,exports) {
-"use strict";
-var $propertyIsEnumerable = {}.propertyIsEnumerable;
-// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-// Nashorn ~ JDK8 bug
-var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({
-    1: 2
-}, 1);
-// `Object.prototype.propertyIsEnumerable` method implementation
-// https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
-exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
-    var descriptor = getOwnPropertyDescriptor(this, V);
-    return !!descriptor && descriptor.enumerable;
-} : $propertyIsEnumerable;
-
-},{}],"1lpav":[function(require,module,exports) {
-"use strict";
+},{"c2dffef8c8a7e11e":"eIE5K"}],"825qY":[function(require,module,exports) {
 module.exports = function(bitmap, value) {
     return {
         enumerable: !(bitmap & 1),
@@ -1192,724 +1328,183 @@ module.exports = function(bitmap, value) {
     };
 };
 
-},{}],"jLWwQ":[function(require,module,exports) {
-"use strict";
-// toObject with fallback for non-array-like ES3 strings
-var IndexedObject = require("9d8f8f50ac9468eb");
-var requireObjectCoercible = require("f7224aed72953ac4");
-module.exports = function(it) {
-    return IndexedObject(requireObjectCoercible(it));
+},{}],"9vAu7":[function(require,module,exports) {
+var global = require("3b38cb7bba0034de");
+var hide = require("37b3e928e2cfb7b2");
+var has = require("bd4fb43c56216f66");
+var SRC = require("47999eeb3f9b97e1")("src");
+var TO_STRING = "toString";
+var $toString = Function[TO_STRING];
+var TPL = ("" + $toString).split(TO_STRING);
+require("bd522f9ac2f77541").inspectSource = function(it) {
+    return $toString.call(it);
 };
-
-},{"9d8f8f50ac9468eb":"kPk5h","f7224aed72953ac4":"fOR0B"}],"kPk5h":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("7ba7e65983d7b662");
-var fails = require("df551e12a7c872dd");
-var classof = require("1d34ea813cebff9c");
-var $Object = Object;
-var split = uncurryThis("".split);
-// fallback for non-array-like ES3 and non-enumerable old V8 strings
-module.exports = fails(function() {
-    // throws an error in rhino, see https://github.com/mozilla/rhino/issues/346
-    // eslint-disable-next-line no-prototype-builtins -- safe
-    return !$Object("z").propertyIsEnumerable(0);
-}) ? function(it) {
-    return classof(it) === "String" ? split(it, "") : $Object(it);
-} : $Object;
-
-},{"7ba7e65983d7b662":"7GlkT","df551e12a7c872dd":"hL6D2","1d34ea813cebff9c":"bdfmm"}],"bdfmm":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("1c71c3f6daac476c");
-var toString = uncurryThis({}.toString);
-var stringSlice = uncurryThis("".slice);
-module.exports = function(it) {
-    return stringSlice(toString(it), 8, -1);
-};
-
-},{"1c71c3f6daac476c":"7GlkT"}],"49tUX":[function(require,module,exports) {
-"use strict";
-// TODO: Remove this module from `core-js@4` since it's split to modules listed below
-require("52e9b3eefbbce1ed");
-require("292fa64716f5b39e");
-
-},{"52e9b3eefbbce1ed":"fOGFr","292fa64716f5b39e":"l7FDS"}],"fOGFr":[function(require,module,exports) {
-"use strict";
-var $ = require("79389288a80b279c");
-var global = require("22a078687be7e1b6");
-var clearImmediate = require("84ba5ca62b8b14c9").clear;
-// `clearImmediate` method
-// http://w3c.github.io/setImmediate/#si-clearImmediate
-$({
-    global: true,
-    bind: true,
-    enumerable: true,
-    forced: global.clearImmediate !== clearImmediate
-}, {
-    clearImmediate: clearImmediate
-});
-
-},{"79389288a80b279c":"dIGt4","22a078687be7e1b6":"i8HOC","84ba5ca62b8b14c9":"7jDg7"}],"dIGt4":[function(require,module,exports) {
-"use strict";
-var global = require("6643b6592ad59b23");
-var getOwnPropertyDescriptor = require("2ec751f39e500b85").f;
-var createNonEnumerableProperty = require("b4567636b28a3b3a");
-var defineBuiltIn = require("50460aa43dd4048a");
-var defineGlobalProperty = require("581238c99f8c2c30");
-var copyConstructorProperties = require("566a383894c688bc");
-var isForced = require("f0e2e697f04e8ad9");
-/*
-  options.target         - name of the target object
-  options.global         - target is the global object
-  options.stat           - export as static methods of target
-  options.proto          - export as prototype methods of target
-  options.real           - real prototype method for the `pure` version
-  options.forced         - export even if the native feature is available
-  options.bind           - bind methods to the target, required for the `pure` version
-  options.wrap           - wrap constructors to preventing global pollution, required for the `pure` version
-  options.unsafe         - use the simple assignment of property instead of delete + defineProperty
-  options.sham           - add a flag to not completely full polyfills
-  options.enumerable     - export as enumerable property
-  options.dontCallGetSet - prevent calling a getter on target
-  options.name           - the .name of the function if it does not match the key
-*/ module.exports = function(options, source) {
-    var TARGET = options.target;
-    var GLOBAL = options.global;
-    var STATIC = options.stat;
-    var FORCED, target, key, targetProperty, sourceProperty, descriptor;
-    if (GLOBAL) target = global;
-    else if (STATIC) target = global[TARGET] || defineGlobalProperty(TARGET, {});
-    else target = (global[TARGET] || {}).prototype;
-    if (target) for(key in source){
-        sourceProperty = source[key];
-        if (options.dontCallGetSet) {
-            descriptor = getOwnPropertyDescriptor(target, key);
-            targetProperty = descriptor && descriptor.value;
-        } else targetProperty = target[key];
-        FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
-        // contained in target
-        if (!FORCED && targetProperty !== undefined) {
-            if (typeof sourceProperty == typeof targetProperty) continue;
-            copyConstructorProperties(sourceProperty, targetProperty);
-        }
-        // add a flag to not completely full polyfills
-        if (options.sham || targetProperty && targetProperty.sham) createNonEnumerableProperty(sourceProperty, "sham", true);
-        defineBuiltIn(target, key, sourceProperty, options);
-    }
-};
-
-},{"6643b6592ad59b23":"i8HOC","2ec751f39e500b85":"lk5NI","b4567636b28a3b3a":"8CL42","50460aa43dd4048a":"6XwEX","581238c99f8c2c30":"ggjnO","566a383894c688bc":"9Z12i","f0e2e697f04e8ad9":"6uTCZ"}],"8CL42":[function(require,module,exports) {
-"use strict";
-var DESCRIPTORS = require("a8753383ef98ee18");
-var definePropertyModule = require("189ab650b8f71085");
-var createPropertyDescriptor = require("1168c8162aa30435");
-module.exports = DESCRIPTORS ? function(object, key, value) {
-    return definePropertyModule.f(object, key, createPropertyDescriptor(1, value));
-} : function(object, key, value) {
-    object[key] = value;
-    return object;
-};
-
-},{"a8753383ef98ee18":"92ZIi","189ab650b8f71085":"iJR4w","1168c8162aa30435":"1lpav"}],"6XwEX":[function(require,module,exports) {
-"use strict";
-var isCallable = require("99ee13632b3fa68");
-var definePropertyModule = require("9ebb3e3004fccc0a");
-var makeBuiltIn = require("f10cc812a3094053");
-var defineGlobalProperty = require("d354802d852d9c2b");
-module.exports = function(O, key, value, options) {
-    if (!options) options = {};
-    var simple = options.enumerable;
-    var name = options.name !== undefined ? options.name : key;
-    if (isCallable(value)) makeBuiltIn(value, name, options);
-    if (options.global) {
-        if (simple) O[key] = value;
-        else defineGlobalProperty(key, value);
-    } else {
-        try {
-            if (!options.unsafe) delete O[key];
-            else if (O[key]) simple = true;
-        } catch (error) {}
-        if (simple) O[key] = value;
-        else definePropertyModule.f(O, key, {
-            value: value,
-            enumerable: false,
-            configurable: !options.nonConfigurable,
-            writable: !options.nonWritable
-        });
-    }
-    return O;
-};
-
-},{"99ee13632b3fa68":"l3Kyn","9ebb3e3004fccc0a":"iJR4w","f10cc812a3094053":"cTB4k","d354802d852d9c2b":"ggjnO"}],"cTB4k":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("ca84677f1ebd1804");
-var fails = require("13360f2842eba261");
-var isCallable = require("103e488c0928755a");
-var hasOwn = require("cbf9b0e0779cc368");
-var DESCRIPTORS = require("3f2eb7efeae2f72b");
-var CONFIGURABLE_FUNCTION_NAME = require("548b10f284264c72").CONFIGURABLE;
-var inspectSource = require("358f00f3103bd55b");
-var InternalStateModule = require("9b2ce14119fd2412");
-var enforceInternalState = InternalStateModule.enforce;
-var getInternalState = InternalStateModule.get;
-var $String = String;
-// eslint-disable-next-line es/no-object-defineproperty -- safe
-var defineProperty = Object.defineProperty;
-var stringSlice = uncurryThis("".slice);
-var replace = uncurryThis("".replace);
-var join = uncurryThis([].join);
-var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function() {
-    return defineProperty(function() {}, "length", {
-        value: 8
-    }).length !== 8;
-});
-var TEMPLATE = String(String).split("String");
-var makeBuiltIn = module.exports = function(value, name, options) {
-    if (stringSlice($String(name), 0, 7) === "Symbol(") name = "[" + replace($String(name), /^Symbol\(([^)]*)\)/, "$1") + "]";
-    if (options && options.getter) name = "get " + name;
-    if (options && options.setter) name = "set " + name;
-    if (!hasOwn(value, "name") || CONFIGURABLE_FUNCTION_NAME && value.name !== name) {
-        if (DESCRIPTORS) defineProperty(value, "name", {
-            value: name,
-            configurable: true
-        });
-        else value.name = name;
-    }
-    if (CONFIGURABLE_LENGTH && options && hasOwn(options, "arity") && value.length !== options.arity) defineProperty(value, "length", {
-        value: options.arity
-    });
-    try {
-        if (options && hasOwn(options, "constructor") && options.constructor) {
-            if (DESCRIPTORS) defineProperty(value, "prototype", {
-                writable: false
-            });
-        } else if (value.prototype) value.prototype = undefined;
-    } catch (error) {}
-    var state = enforceInternalState(value);
-    if (!hasOwn(state, "source")) state.source = join(TEMPLATE, typeof name == "string" ? name : "");
-    return value;
-};
+(module.exports = function(O, key, val, safe) {
+    var isFunction = typeof val == "function";
+    if (isFunction) has(val, "name") || hide(val, "name", key);
+    if (O[key] === val) return;
+    if (isFunction) has(val, SRC) || hide(val, SRC, O[key] ? "" + O[key] : TPL.join(String(key)));
+    if (O === global) O[key] = val;
+    else if (!safe) {
+        delete O[key];
+        hide(O, key, val);
+    } else if (O[key]) O[key] = val;
+    else hide(O, key, val);
 // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-// eslint-disable-next-line no-extend-native -- required
-Function.prototype.toString = makeBuiltIn(function toString() {
-    return isCallable(this) && getInternalState(this).source || inspectSource(this);
-}, "toString");
+})(Function.prototype, TO_STRING, function toString() {
+    return typeof this == "function" && this[SRC] || $toString.call(this);
+});
 
-},{"ca84677f1ebd1804":"7GlkT","13360f2842eba261":"hL6D2","103e488c0928755a":"l3Kyn","cbf9b0e0779cc368":"gC2Q5","3f2eb7efeae2f72b":"92ZIi","548b10f284264c72":"l6Kgd","358f00f3103bd55b":"9jh7O","9b2ce14119fd2412":"7AMlF"}],"l6Kgd":[function(require,module,exports) {
-"use strict";
-var DESCRIPTORS = require("8ad2bacb0e20b95c");
-var hasOwn = require("4eabfd8f83afc9d5");
-var FunctionPrototype = Function.prototype;
-// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
-var EXISTS = hasOwn(FunctionPrototype, "name");
-// additional protection from minified / mangled / dropped function names
-var PROPER = EXISTS && (function something() {}).name === "something";
-var CONFIGURABLE = EXISTS && (!DESCRIPTORS || DESCRIPTORS && getDescriptor(FunctionPrototype, "name").configurable);
-module.exports = {
-    EXISTS: EXISTS,
-    PROPER: PROPER,
-    CONFIGURABLE: CONFIGURABLE
+},{"3b38cb7bba0034de":"8xCse","37b3e928e2cfb7b2":"ddpVq","bd4fb43c56216f66":"biQ7v","47999eeb3f9b97e1":"gBq6n","bd522f9ac2f77541":"4o9Ko"}],"biQ7v":[function(require,module,exports) {
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function(it, key) {
+    return hasOwnProperty.call(it, key);
 };
 
-},{"8ad2bacb0e20b95c":"92ZIi","4eabfd8f83afc9d5":"gC2Q5"}],"9jh7O":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("26e26db98367212e");
-var isCallable = require("40ed9a4f6ae66648");
-var store = require("485d48d6f4c6739e");
-var functionToString = uncurryThis(Function.toString);
-// this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
-if (!isCallable(store.inspectSource)) store.inspectSource = function(it) {
-    return functionToString(it);
-};
-module.exports = store.inspectSource;
-
-},{"26e26db98367212e":"7GlkT","40ed9a4f6ae66648":"l3Kyn","485d48d6f4c6739e":"l4ncH"}],"7AMlF":[function(require,module,exports) {
-"use strict";
-var NATIVE_WEAK_MAP = require("d3f0c9f3327b2fd6");
-var global = require("ca46b44b6201ccd7");
-var isObject = require("f82e6cc0ac249fa5");
-var createNonEnumerableProperty = require("c0ae163eea4ef97");
-var hasOwn = require("6dea7358344877bb");
-var shared = require("3e035a1241da2f0");
-var sharedKey = require("88d6ccc27e779e5a");
-var hiddenKeys = require("d40b9b3abdbb956e");
-var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
-var TypeError = global.TypeError;
-var WeakMap = global.WeakMap;
-var set, get, has;
-var enforce = function(it) {
-    return has(it) ? get(it) : set(it, {});
-};
-var getterFor = function(TYPE) {
-    return function(it) {
-        var state;
-        if (!isObject(it) || (state = get(it)).type !== TYPE) throw new TypeError("Incompatible receiver, " + TYPE + " required");
-        return state;
-    };
-};
-if (NATIVE_WEAK_MAP || shared.state) {
-    var store = shared.state || (shared.state = new WeakMap());
-    /* eslint-disable no-self-assign -- prototype methods protection */ store.get = store.get;
-    store.has = store.has;
-    store.set = store.set;
-    /* eslint-enable no-self-assign -- prototype methods protection */ set = function(it, metadata) {
-        if (store.has(it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
-        metadata.facade = it;
-        store.set(it, metadata);
-        return metadata;
-    };
-    get = function(it) {
-        return store.get(it) || {};
-    };
-    has = function(it) {
-        return store.has(it);
-    };
-} else {
-    var STATE = sharedKey("state");
-    hiddenKeys[STATE] = true;
-    set = function(it, metadata) {
-        if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
-        metadata.facade = it;
-        createNonEnumerableProperty(it, STATE, metadata);
-        return metadata;
-    };
-    get = function(it) {
-        return hasOwn(it, STATE) ? it[STATE] : {};
-    };
-    has = function(it) {
-        return hasOwn(it, STATE);
-    };
-}
-module.exports = {
-    set: set,
-    get: get,
-    has: has,
-    enforce: enforce,
-    getterFor: getterFor
-};
-
-},{"d3f0c9f3327b2fd6":"2PZTl","ca46b44b6201ccd7":"i8HOC","f82e6cc0ac249fa5":"Z0pBo","c0ae163eea4ef97":"8CL42","6dea7358344877bb":"gC2Q5","3e035a1241da2f0":"l4ncH","88d6ccc27e779e5a":"eAjGz","d40b9b3abdbb956e":"661m4"}],"2PZTl":[function(require,module,exports) {
-"use strict";
-var global = require("6bd2547a42528a9c");
-var isCallable = require("aa77fff8d5ef0565");
-var WeakMap = global.WeakMap;
-module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
-
-},{"6bd2547a42528a9c":"i8HOC","aa77fff8d5ef0565":"l3Kyn"}],"eAjGz":[function(require,module,exports) {
-"use strict";
-var shared = require("dbc8182adeb8c92f");
-var uid = require("90b4ffb58508a6e5");
-var keys = shared("keys");
+},{}],"gBq6n":[function(require,module,exports) {
+var id = 0;
+var px = Math.random();
 module.exports = function(key) {
-    return keys[key] || (keys[key] = uid(key));
+    return "Symbol(".concat(key === undefined ? "" : key, ")_", (++id + px).toString(36));
 };
 
-},{"dbc8182adeb8c92f":"i1mHK","90b4ffb58508a6e5":"a3SEE"}],"661m4":[function(require,module,exports) {
-"use strict";
-module.exports = {};
-
-},{}],"9Z12i":[function(require,module,exports) {
-"use strict";
-var hasOwn = require("d91d786cc71453ce");
-var ownKeys = require("88cb809f98beddc6");
-var getOwnPropertyDescriptorModule = require("10ea642aad5f7c21");
-var definePropertyModule = require("39ff598ce822187e");
-module.exports = function(target, source, exceptions) {
-    var keys = ownKeys(source);
-    var defineProperty = definePropertyModule.f;
-    var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
-    for(var i = 0; i < keys.length; i++){
-        var key = keys[i];
-        if (!hasOwn(target, key) && !(exceptions && hasOwn(exceptions, key))) defineProperty(target, key, getOwnPropertyDescriptor(source, key));
+},{}],"4rQSm":[function(require,module,exports) {
+// optional / simple context binding
+var aFunction = require("2e030b8cbf2f950a");
+module.exports = function(fn, that, length) {
+    aFunction(fn);
+    if (that === undefined) return fn;
+    switch(length){
+        case 1:
+            return function(a) {
+                return fn.call(that, a);
+            };
+        case 2:
+            return function(a, b) {
+                return fn.call(that, a, b);
+            };
+        case 3:
+            return function(a, b, c) {
+                return fn.call(that, a, b, c);
+            };
     }
-};
-
-},{"d91d786cc71453ce":"gC2Q5","88cb809f98beddc6":"1CX1A","10ea642aad5f7c21":"lk5NI","39ff598ce822187e":"iJR4w"}],"1CX1A":[function(require,module,exports) {
-"use strict";
-var getBuiltIn = require("3cc1e4329d869e34");
-var uncurryThis = require("2b8e77cbdbe3db7a");
-var getOwnPropertyNamesModule = require("d703bcb62fcda216");
-var getOwnPropertySymbolsModule = require("157674bad2772c6d");
-var anObject = require("a09e060b9cae3c6c");
-var concat = uncurryThis([].concat);
-// all object keys, includes non-enumerable and symbols
-module.exports = getBuiltIn("Reflect", "ownKeys") || function ownKeys(it) {
-    var keys = getOwnPropertyNamesModule.f(anObject(it));
-    var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
-    return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
-};
-
-},{"3cc1e4329d869e34":"6ZUSY","2b8e77cbdbe3db7a":"7GlkT","d703bcb62fcda216":"fjY04","157674bad2772c6d":"4DWO3","a09e060b9cae3c6c":"4isCr"}],"fjY04":[function(require,module,exports) {
-"use strict";
-var internalObjectKeys = require("6d8591e17a49376c");
-var enumBugKeys = require("2c933f93dd98f385");
-var hiddenKeys = enumBugKeys.concat("length", "prototype");
-// `Object.getOwnPropertyNames` method
-// https://tc39.es/ecma262/#sec-object.getownpropertynames
-// eslint-disable-next-line es/no-object-getownpropertynames -- safe
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-    return internalObjectKeys(O, hiddenKeys);
-};
-
-},{"6d8591e17a49376c":"hl5T1","2c933f93dd98f385":"9RnJm"}],"hl5T1":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("363ee0e6bb4f46a7");
-var hasOwn = require("3183fe0b0bf6f6ac");
-var toIndexedObject = require("28192ac12e934672");
-var indexOf = require("a5f9c5d8e993ccd6").indexOf;
-var hiddenKeys = require("57775908f1581bc6");
-var push = uncurryThis([].push);
-module.exports = function(object, names) {
-    var O = toIndexedObject(object);
-    var i = 0;
-    var result = [];
-    var key;
-    for(key in O)!hasOwn(hiddenKeys, key) && hasOwn(O, key) && push(result, key);
-    // Don't enum bug & hidden keys
-    while(names.length > i)if (hasOwn(O, key = names[i++])) ~indexOf(result, key) || push(result, key);
-    return result;
-};
-
-},{"363ee0e6bb4f46a7":"7GlkT","3183fe0b0bf6f6ac":"gC2Q5","28192ac12e934672":"jLWwQ","a5f9c5d8e993ccd6":"n5IsC","57775908f1581bc6":"661m4"}],"n5IsC":[function(require,module,exports) {
-"use strict";
-var toIndexedObject = require("d5dcbcd68ac5acd0");
-var toAbsoluteIndex = require("212b13aecfa48226");
-var lengthOfArrayLike = require("e5a8b3e1da4c5637");
-// `Array.prototype.{ indexOf, includes }` methods implementation
-var createMethod = function(IS_INCLUDES) {
-    return function($this, el, fromIndex) {
-        var O = toIndexedObject($this);
-        var length = lengthOfArrayLike(O);
-        var index = toAbsoluteIndex(fromIndex, length);
-        var value;
-        // Array#includes uses SameValueZero equality algorithm
-        // eslint-disable-next-line no-self-compare -- NaN check
-        if (IS_INCLUDES && el !== el) while(length > index){
-            value = O[index++];
-            // eslint-disable-next-line no-self-compare -- NaN check
-            if (value !== value) return true;
-        // Array#indexOf ignores holes, Array#includes - not
-        }
-        else for(; length > index; index++){
-            if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
-        }
-        return !IS_INCLUDES && -1;
+    return function() {
+        return fn.apply(that, arguments);
     };
 };
-module.exports = {
-    // `Array.prototype.includes` method
-    // https://tc39.es/ecma262/#sec-array.prototype.includes
-    includes: createMethod(true),
-    // `Array.prototype.indexOf` method
-    // https://tc39.es/ecma262/#sec-array.prototype.indexof
-    indexOf: createMethod(false)
+
+},{"2e030b8cbf2f950a":"55L9l"}],"55L9l":[function(require,module,exports) {
+module.exports = function(it) {
+    if (typeof it != "function") throw TypeError(it + " is not a function!");
+    return it;
 };
 
-},{"d5dcbcd68ac5acd0":"jLWwQ","212b13aecfa48226":"5yh27","e5a8b3e1da4c5637":"lY4mS"}],"5yh27":[function(require,module,exports) {
-"use strict";
-var toIntegerOrInfinity = require("72fe0a53ad43912c");
-var max = Math.max;
-var min = Math.min;
-// Helper for a popular repeating case of the spec:
-// Let integer be ? ToInteger(index).
-// If integer < 0, let result be max((length + integer), 0); else let result be min(integer, length).
-module.exports = function(index, length) {
-    var integer = toIntegerOrInfinity(index);
-    return integer < 0 ? max(integer + length, 0) : min(integer, length);
-};
-
-},{"72fe0a53ad43912c":"kLXGe"}],"kLXGe":[function(require,module,exports) {
-"use strict";
-var trunc = require("3403cba02b5f61d8");
-// `ToIntegerOrInfinity` abstract operation
-// https://tc39.es/ecma262/#sec-tointegerorinfinity
-module.exports = function(argument) {
-    var number = +argument;
-    // eslint-disable-next-line no-self-compare -- NaN check
-    return number !== number || number === 0 ? 0 : trunc(number);
-};
-
-},{"3403cba02b5f61d8":"7O8gb"}],"7O8gb":[function(require,module,exports) {
-"use strict";
-var ceil = Math.ceil;
-var floor = Math.floor;
-// `Math.trunc` method
-// https://tc39.es/ecma262/#sec-math.trunc
-// eslint-disable-next-line es/no-math-trunc -- safe
-module.exports = Math.trunc || function trunc(x) {
-    var n = +x;
-    return (n > 0 ? floor : ceil)(n);
-};
-
-},{}],"lY4mS":[function(require,module,exports) {
-"use strict";
-var toLength = require("23d9716c54a2ab90");
-// `LengthOfArrayLike` abstract operation
-// https://tc39.es/ecma262/#sec-lengthofarraylike
-module.exports = function(obj) {
-    return toLength(obj.length);
-};
-
-},{"23d9716c54a2ab90":"fU04N"}],"fU04N":[function(require,module,exports) {
-"use strict";
-var toIntegerOrInfinity = require("c48d3a8b8ac52b0b");
-var min = Math.min;
-// `ToLength` abstract operation
-// https://tc39.es/ecma262/#sec-tolength
-module.exports = function(argument) {
-    return argument > 0 ? min(toIntegerOrInfinity(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
-};
-
-},{"c48d3a8b8ac52b0b":"kLXGe"}],"9RnJm":[function(require,module,exports) {
-"use strict";
-// IE8- don't enum bug keys
-module.exports = [
-    "constructor",
-    "hasOwnProperty",
-    "isPrototypeOf",
-    "propertyIsEnumerable",
-    "toLocaleString",
-    "toString",
-    "valueOf"
-];
-
-},{}],"4DWO3":[function(require,module,exports) {
-"use strict";
-// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
-exports.f = Object.getOwnPropertySymbols;
-
-},{}],"6uTCZ":[function(require,module,exports) {
-"use strict";
-var fails = require("10299561ea0c7870");
-var isCallable = require("8b1ecdaf59f07210");
-var replacement = /#|\.prototype\./;
-var isForced = function(feature, detection) {
-    var value = data[normalize(feature)];
-    return value === POLYFILL ? true : value === NATIVE ? false : isCallable(detection) ? fails(detection) : !!detection;
-};
-var normalize = isForced.normalize = function(string) {
-    return String(string).replace(replacement, ".").toLowerCase();
-};
-var data = isForced.data = {};
-var NATIVE = isForced.NATIVE = "N";
-var POLYFILL = isForced.POLYFILL = "P";
-module.exports = isForced;
-
-},{"10299561ea0c7870":"hL6D2","8b1ecdaf59f07210":"l3Kyn"}],"7jDg7":[function(require,module,exports) {
-"use strict";
-var global = require("1e8ed58235e9956a");
-var apply = require("e574be68c288c7c8");
-var bind = require("df212787338802d3");
-var isCallable = require("afdf018c2d01bbc6");
-var hasOwn = require("35a3e849940fd612");
-var fails = require("b8bf5434d2248ca7");
-var html = require("731f9370cc21fc3b");
-var arraySlice = require("ec358060964e4bde");
-var createElement = require("907adb6d219da7a3");
-var validateArgumentsLength = require("f398561ebd49a798");
-var IS_IOS = require("fdfdeccf85e81d4f");
-var IS_NODE = require("fcf929779abbf29c");
-var set = global.setImmediate;
-var clear = global.clearImmediate;
+},{}],"bPiT9":[function(require,module,exports) {
+var ctx = require("32356da8c45c3f2c");
+var invoke = require("fb4cc083a1a0dab7");
+var html = require("4c3e5a730f62d9d7");
+var cel = require("926c67e3e4b7eb5");
+var global = require("597566726cfd8373");
 var process = global.process;
-var Dispatch = global.Dispatch;
-var Function = global.Function;
+var setTask = global.setImmediate;
+var clearTask = global.clearImmediate;
 var MessageChannel = global.MessageChannel;
-var String = global.String;
+var Dispatch = global.Dispatch;
 var counter = 0;
 var queue = {};
 var ONREADYSTATECHANGE = "onreadystatechange";
-var $location, defer, channel, port;
-fails(function() {
-    // Deno throws a ReferenceError on `location` access without `--location` flag
-    $location = global.location;
-});
-var run = function(id) {
-    if (hasOwn(queue, id)) {
+var defer, channel, port;
+var run = function() {
+    var id = +this;
+    // eslint-disable-next-line no-prototype-builtins
+    if (queue.hasOwnProperty(id)) {
         var fn = queue[id];
         delete queue[id];
         fn();
     }
 };
-var runner = function(id) {
-    return function() {
-        run(id);
-    };
-};
-var eventListener = function(event) {
-    run(event.data);
-};
-var globalPostMessageDefer = function(id) {
-    // old engines have not location.origin
-    global.postMessage(String(id), $location.protocol + "//" + $location.host);
+var listener = function(event) {
+    run.call(event.data);
 };
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
-if (!set || !clear) {
-    set = function setImmediate(handler) {
-        validateArgumentsLength(arguments.length, 1);
-        var fn = isCallable(handler) ? handler : Function(handler);
-        var args = arraySlice(arguments, 1);
+if (!setTask || !clearTask) {
+    setTask = function setImmediate(fn) {
+        var args = [];
+        var i = 1;
+        while(arguments.length > i)args.push(arguments[i++]);
         queue[++counter] = function() {
-            apply(fn, undefined, args);
+            // eslint-disable-next-line no-new-func
+            invoke(typeof fn == "function" ? fn : Function(fn), args);
         };
         defer(counter);
         return counter;
     };
-    clear = function clearImmediate(id) {
+    clearTask = function clearImmediate(id) {
         delete queue[id];
     };
     // Node.js 0.8-
-    if (IS_NODE) defer = function(id) {
-        process.nextTick(runner(id));
+    if (require("319575ec41286486")(process) == "process") defer = function(id) {
+        process.nextTick(ctx(run, id, 1));
     };
     else if (Dispatch && Dispatch.now) defer = function(id) {
-        Dispatch.now(runner(id));
+        Dispatch.now(ctx(run, id, 1));
     };
-    else if (MessageChannel && !IS_IOS) {
+    else if (MessageChannel) {
         channel = new MessageChannel();
         port = channel.port2;
-        channel.port1.onmessage = eventListener;
-        defer = bind(port.postMessage, port);
+        channel.port1.onmessage = listener;
+        defer = ctx(port.postMessage, port, 1);
     // Browsers with postMessage, skip WebWorkers
     // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-    } else if (global.addEventListener && isCallable(global.postMessage) && !global.importScripts && $location && $location.protocol !== "file:" && !fails(globalPostMessageDefer)) {
-        defer = globalPostMessageDefer;
-        global.addEventListener("message", eventListener, false);
+    } else if (global.addEventListener && typeof postMessage == "function" && !global.importScripts) {
+        defer = function(id) {
+            global.postMessage(id + "", "*");
+        };
+        global.addEventListener("message", listener, false);
     // IE8-
-    } else if (ONREADYSTATECHANGE in createElement("script")) defer = function(id) {
-        html.appendChild(createElement("script"))[ONREADYSTATECHANGE] = function() {
+    } else if (ONREADYSTATECHANGE in cel("script")) defer = function(id) {
+        html.appendChild(cel("script"))[ONREADYSTATECHANGE] = function() {
             html.removeChild(this);
-            run(id);
+            run.call(id);
         };
     };
     else defer = function(id) {
-        setTimeout(runner(id), 0);
+        setTimeout(ctx(run, id, 1), 0);
     };
 }
 module.exports = {
-    set: set,
-    clear: clear
+    set: setTask,
+    clear: clearTask
 };
 
-},{"1e8ed58235e9956a":"i8HOC","e574be68c288c7c8":"148ka","df212787338802d3":"7vpmS","afdf018c2d01bbc6":"l3Kyn","35a3e849940fd612":"gC2Q5","b8bf5434d2248ca7":"hL6D2","731f9370cc21fc3b":"2pze4","ec358060964e4bde":"RsFXo","907adb6d219da7a3":"4bOHl","f398561ebd49a798":"b9O3D","fdfdeccf85e81d4f":"bzGah","fcf929779abbf29c":"2Jcp4"}],"148ka":[function(require,module,exports) {
-"use strict";
-var NATIVE_BIND = require("d07466971ded2aca");
-var FunctionPrototype = Function.prototype;
-var apply = FunctionPrototype.apply;
-var call = FunctionPrototype.call;
-// eslint-disable-next-line es/no-reflect -- safe
-module.exports = typeof Reflect == "object" && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function() {
-    return call.apply(apply, arguments);
-});
-
-},{"d07466971ded2aca":"i16Dq"}],"7vpmS":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("92f6f475baa85665");
-var aCallable = require("547ee4f9dab0cc76");
-var NATIVE_BIND = require("5acd31cba656d393");
-var bind = uncurryThis(uncurryThis.bind);
-// optional / simple context binding
-module.exports = function(fn, that) {
-    aCallable(fn);
-    return that === undefined ? fn : NATIVE_BIND ? bind(fn, that) : function() {
-        return fn.apply(that, arguments);
-    };
+},{"32356da8c45c3f2c":"4rQSm","fb4cc083a1a0dab7":"c7Bab","4c3e5a730f62d9d7":"lPhWk","926c67e3e4b7eb5":"2qBag","597566726cfd8373":"8xCse","319575ec41286486":"frIbo"}],"c7Bab":[function(require,module,exports) {
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+module.exports = function(fn, args, that) {
+    var un = that === undefined;
+    switch(args.length){
+        case 0:
+            return un ? fn() : fn.call(that);
+        case 1:
+            return un ? fn(args[0]) : fn.call(that, args[0]);
+        case 2:
+            return un ? fn(args[0], args[1]) : fn.call(that, args[0], args[1]);
+        case 3:
+            return un ? fn(args[0], args[1], args[2]) : fn.call(that, args[0], args[1], args[2]);
+        case 4:
+            return un ? fn(args[0], args[1], args[2], args[3]) : fn.call(that, args[0], args[1], args[2], args[3]);
+    }
+    return fn.apply(that, args);
 };
 
-},{"92f6f475baa85665":"5Hioa","547ee4f9dab0cc76":"gOMir","5acd31cba656d393":"i16Dq"}],"5Hioa":[function(require,module,exports) {
-"use strict";
-var classofRaw = require("8e77093015e1e67f");
-var uncurryThis = require("9daa4dbbca634c9e");
-module.exports = function(fn) {
-    // Nashorn bug:
-    //   https://github.com/zloirock/core-js/issues/1128
-    //   https://github.com/zloirock/core-js/issues/1130
-    if (classofRaw(fn) === "Function") return uncurryThis(fn);
+},{}],"lPhWk":[function(require,module,exports) {
+var document = require("4f8d3f9801bd0f96").document;
+module.exports = document && document.documentElement;
+
+},{"4f8d3f9801bd0f96":"8xCse"}],"frIbo":[function(require,module,exports) {
+var toString = {}.toString;
+module.exports = function(it) {
+    return toString.call(it).slice(8, -1);
 };
-
-},{"8e77093015e1e67f":"bdfmm","9daa4dbbca634c9e":"7GlkT"}],"2pze4":[function(require,module,exports) {
-"use strict";
-var getBuiltIn = require("14cb391fa4a0dda8");
-module.exports = getBuiltIn("document", "documentElement");
-
-},{"14cb391fa4a0dda8":"6ZUSY"}],"RsFXo":[function(require,module,exports) {
-"use strict";
-var uncurryThis = require("5250b5c9324ccbe");
-module.exports = uncurryThis([].slice);
-
-},{"5250b5c9324ccbe":"7GlkT"}],"b9O3D":[function(require,module,exports) {
-"use strict";
-var $TypeError = TypeError;
-module.exports = function(passed, required) {
-    if (passed < required) throw new $TypeError("Not enough arguments");
-    return passed;
-};
-
-},{}],"bzGah":[function(require,module,exports) {
-"use strict";
-var userAgent = require("d96985a79ddda108");
-// eslint-disable-next-line redos/no-vulnerable -- safe
-module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
-
-},{"d96985a79ddda108":"73xBt"}],"2Jcp4":[function(require,module,exports) {
-"use strict";
-var global = require("1b4555a3a97d5ef1");
-var classof = require("779f783a397f138");
-module.exports = classof(global.process) === "process";
-
-},{"1b4555a3a97d5ef1":"i8HOC","779f783a397f138":"bdfmm"}],"l7FDS":[function(require,module,exports) {
-"use strict";
-var $ = require("33581c362196ed1f");
-var global = require("9a84e40db4964af6");
-var setTask = require("4219ce460223bd08").set;
-var schedulersFix = require("738dc378e6a94c64");
-// https://github.com/oven-sh/bun/issues/1633
-var setImmediate = global.setImmediate ? schedulersFix(setTask, false) : setTask;
-// `setImmediate` method
-// http://w3c.github.io/setImmediate/#si-setImmediate
-$({
-    global: true,
-    bind: true,
-    enumerable: true,
-    forced: global.setImmediate !== setImmediate
-}, {
-    setImmediate: setImmediate
-});
-
-},{"33581c362196ed1f":"dIGt4","9a84e40db4964af6":"i8HOC","4219ce460223bd08":"7jDg7","738dc378e6a94c64":"cAPb6"}],"cAPb6":[function(require,module,exports) {
-"use strict";
-var global = require("373dd417176da2c5");
-var apply = require("a68ecfcbf29c46f6");
-var isCallable = require("7087588d33667af2");
-var ENGINE_IS_BUN = require("7679d27a979f2651");
-var USER_AGENT = require("7493ba8d8bb8623d");
-var arraySlice = require("cff2c830bdea4f24");
-var validateArgumentsLength = require("58a74f00cee1ac64");
-var Function = global.Function;
-// dirty IE9- and Bun 0.3.0- checks
-var WRAP = /MSIE .\./.test(USER_AGENT) || ENGINE_IS_BUN && function() {
-    var version = global.Bun.version.split(".");
-    return version.length < 3 || version[0] === "0" && (version[1] < 3 || version[1] === "3" && version[2] === "0");
-}();
-// IE9- / Bun 0.3.0- setTimeout / setInterval / setImmediate additional parameters fix
-// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
-// https://github.com/oven-sh/bun/issues/1633
-module.exports = function(scheduler, hasTimeArg) {
-    var firstParamIndex = hasTimeArg ? 2 : 1;
-    return WRAP ? function(handler, timeout /* , ...arguments */ ) {
-        var boundArgs = validateArgumentsLength(arguments.length, 1) > firstParamIndex;
-        var fn = isCallable(handler) ? handler : Function(handler);
-        var params = boundArgs ? arraySlice(arguments, firstParamIndex) : [];
-        var callback = boundArgs ? function() {
-            apply(fn, this, params);
-        } : fn;
-        return hasTimeArg ? scheduler(callback, timeout) : scheduler(callback);
-    } : scheduler;
-};
-
-},{"373dd417176da2c5":"i8HOC","a68ecfcbf29c46f6":"148ka","7087588d33667af2":"l3Kyn","7679d27a979f2651":"2BA6V","7493ba8d8bb8623d":"73xBt","cff2c830bdea4f24":"RsFXo","58a74f00cee1ac64":"b9O3D"}],"2BA6V":[function(require,module,exports) {
-"use strict";
-/* global Bun -- Deno case */ module.exports = typeof Bun == "function" && Bun && typeof Bun.version == "string";
 
 },{}],"dXNgZ":[function(require,module,exports) {
 /**
@@ -2494,487 +2089,6 @@ try {
     if (typeof globalThis === "object") globalThis.regeneratorRuntime = runtime;
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
-
-},{}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"Y4A21":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state);
-parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
-const state = {
-    recipe: {}
-};
-const loadRecipe = async function(id) {
-    try {
-        // fetch function returns a promise, and since we are in an async function, we can then await that promise
-        const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
-        // and once we have that result, we convert that to json
-        const data = await res.json();
-        // throwing the error
-        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-        // we have recipe on both sides, so we can use destructuring
-        // let recipe = data.data.recipe;
-        let { recipe } = data.data;
-        state.recipe = {
-            id: recipe.id,
-            title: recipe.title,
-            publisher: recipe.publisher,
-            sourceUrl: recipe.source_url,
-            image: recipe.image_url,
-            servings: recipe.servings,
-            cookingTime: recipe.cooking_time,
-            ingredients: recipe.ingredients
-        };
-    } catch (err) {
-        alert(err);
-    }
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l60JC":[function(require,module,exports) {
-// import icons from '../img/icons.svg'; - Parcel 1
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _iconsSvg = require("url:../../img/icons.svg"); // Parcel 2
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-var _fractional = require("fractional"); // this is an npm package (npm install fractional) to implement a functionality that we dont want to to implement ourselves - formatting quantities
-console.log((0, _fractional.Fraction));
-class RecipeView {
-    #parentElement = document.querySelector(".recipe");
-    #data;
-    render(data) {
-        this.#data = data;
-        const markup = this.#generateMarkup();
-        this.#clear();
-        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    #clear() {
-        this.#parentElement.innerHTML = "";
-    }
-    renderSpinner = function() {
-        const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
-      </svg>
-    </div>
-  `;
-        this.#parentElement.innerHTML = "";
-        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
-    };
-    #generateMarkup() {
-        return `
-    <figure class="recipe__fig">
-    <img src="${this.#data.image}" alt="${this.#data.title}" class="recipe__img" />
-    <h1 class="recipe__title">
-      <span>${this.#data.title}</span>
-    </h1>
-  </figure>
-
-  <div class="recipe__details">
-    <div class="recipe__info">
-      <svg class="recipe__info-icon">
-        <use href="${0, _iconsSvgDefault.default}#icon-clock"></use>
-      </svg>
-      <span class="recipe__info-data recipe__info-data--minutes">${this.#data.cookingTime}</span>
-      <span class="recipe__info-text">minutes</span>
-    </div>
-    <div class="recipe__info">
-      <svg class="recipe__info-icon">
-        <use href="${0, _iconsSvgDefault.default}#icon-users"></use>
-      </svg>
-      <span class="recipe__info-data recipe__info-data--people">${this.#data.servings}</span>
-      <span class="recipe__info-text">servings</span>
-
-      <div class="recipe__info-buttons">
-        <button class="btn--tiny btn--increase-servings">
-          <svg>
-            <use href="${0, _iconsSvgDefault.default}#icon-minus-circle"></use>
-          </svg>
-        </button>
-        <button class="btn--tiny btn--increase-servings">
-          <svg>
-            <use href="${0, _iconsSvgDefault.default}#icon-plus-circle"></use>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="recipe__user-generated">
-      <svg>
-        <use href="${0, _iconsSvgDefault.default}#icon-user"></use>
-      </svg>
-    </div>
-    <button class="btn--round">
-      <svg class="">
-        <use href="${0, _iconsSvgDefault.default}#icon-bookmark-fill"></use>
-      </svg>
-    </button>
-  </div>
-
-  <div class="recipe__ingredients">
-    <h2 class="heading--2">Recipe ingredients</h2>
-    <ul class="recipe__ingredient-list">
-
-    ${this.#data.ingredients.map(this.#generateMarkupIngredient).join("")}
-    </ul>
-  </div>
-
-  <div class="recipe__directions">
-    <h2 class="heading--2">How to cook it</h2>
-    <p class="recipe__directions-text">
-      This recipe was carefully designed and tested by
-      <span class="recipe__publisher">${this.#data.publisher}</span>. Please check out
-      directions at their website.
-    </p>
-    <a
-      class="btn--small recipe__btn"
-      href="${this.#data.sourceUrl}"
-      target="_blank"
-    >
-      <span>Directions</span>
-      <svg class="search__icon">
-        <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
-      </svg>
-    </a>
-  </div>
-    `;
-    }
-    #generateMarkupIngredient(ing) {
-        return ` 
-    <li class="recipe__ingredient">
-    <svg class="recipe__icon">
-      <use href="${0, _iconsSvgDefault.default}#icon-check"></use>
-    </svg>
-    <div class="recipe__quantity">${ing.quantity ? new (0, _fractional.Fraction)(ing.quantity).toString() : ""}</div>
-    <div class="recipe__description">
-      <span class="recipe__unit">${ing.unit}</span>
-      ${ing.description}
-    </div>
-  </li>
-    `;
-    }
-}
-exports.default = new RecipeView();
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp","fractional":"3SU56"}],"loVOp":[function(require,module,exports) {
-module.exports = require("9bcc84ee5d265e38").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
-
-},{"9bcc84ee5d265e38":"lgJ39"}],"lgJ39":[function(require,module,exports) {
-"use strict";
-var bundleURL = {};
-function getBundleURLCached(id) {
-    var value = bundleURL[id];
-    if (!value) {
-        value = getBundleURL();
-        bundleURL[id] = value;
-    }
-    return value;
-}
-function getBundleURL() {
-    try {
-        throw new Error();
-    } catch (err) {
-        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
-        if (matches) // The first two stack frames will be this function and getBundleURLCached.
-        // Use the 3rd one, which will be a runtime in the original bundle.
-        return getBaseURL(matches[2]);
-    }
-    return "/";
-}
-function getBaseURL(url) {
-    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
-}
-// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-function getOrigin(url) {
-    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
-    if (!matches) throw new Error("Origin not found");
-    return matches[0];
-}
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-
-},{}],"3SU56":[function(require,module,exports) {
-/*
-fraction.js
-A Javascript fraction library.
-
-Copyright (c) 2009  Erik Garrison <erik@hypervolu.me>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-*/ /* Fractions */ /* 
- *
- * Fraction objects are comprised of a numerator and a denomenator.  These
- * values can be accessed at fraction.numerator and fraction.denomenator.
- *
- * Fractions are always returned and stored in lowest-form normalized format.
- * This is accomplished via Fraction.normalize.
- *
- * The following mathematical operations on fractions are supported:
- *
- * Fraction.equals
- * Fraction.add
- * Fraction.subtract
- * Fraction.multiply
- * Fraction.divide
- *
- * These operations accept both numbers and fraction objects.  (Best results
- * are guaranteed when the input is a fraction object.)  They all return a new
- * Fraction object.
- *
- * Usage:
- *
- * TODO
- *
- */ /*
- * The Fraction constructor takes one of:
- *   an explicit numerator (integer) and denominator (integer),
- *   a string representation of the fraction (string),
- *   or a floating-point number (float)
- *
- * These initialization methods are provided for convenience.  Because of
- * rounding issues the best results will be given when the fraction is
- * constructed from an explicit integer numerator and denomenator, and not a
- * decimal number.
- *
- *
- * e.g. new Fraction(1, 2) --> 1/2
- *      new Fraction('1/2') --> 1/2
- *      new Fraction('2 3/4') --> 11/4  (prints as 2 3/4)
- *
- */ Fraction = function(numerator, denominator) {
-    /* double argument invocation */ if (typeof numerator !== "undefined" && denominator) {
-        if (typeof numerator === "number" && typeof denominator === "number") {
-            this.numerator = numerator;
-            this.denominator = denominator;
-        } else if (typeof numerator === "string" && typeof denominator === "string") {
-            // what are they?
-            // hmm....
-            // assume they are ints?
-            this.numerator = parseInt(numerator);
-            this.denominator = parseInt(denominator);
-        }
-    /* single-argument invocation */ } else if (typeof denominator === "undefined") {
-        num = numerator; // swap variable names for legibility
-        if (typeof num === "number") {
-            this.numerator = num;
-            this.denominator = 1;
-        } else if (typeof num === "string") {
-            var a, b; // hold the first and second part of the fraction, e.g. a = '1' and b = '2/3' in 1 2/3
-            // or a = '2/3' and b = undefined if we are just passed a single-part number
-            var arr = num.split(" ");
-            if (arr[0]) a = arr[0];
-            if (arr[1]) b = arr[1];
-            /* compound fraction e.g. 'A B/C' */ //  if a is an integer ...
-            if (a % 1 === 0 && b && b.match("/")) return new Fraction(a).add(new Fraction(b));
-            else if (a && !b) {
-                /* simple fraction e.g. 'A/B' */ if (typeof a === "string" && a.match("/")) {
-                    // it's not a whole number... it's actually a fraction without a whole part written
-                    var f = a.split("/");
-                    this.numerator = f[0];
-                    this.denominator = f[1];
-                /* string floating point */ } else if (typeof a === "string" && a.match(".")) return new Fraction(parseFloat(a));
-                else {
-                    this.numerator = parseInt(a);
-                    this.denominator = 1;
-                }
-            } else return undefined; // could not parse
-        }
-    }
-    this.normalize();
-};
-Fraction.prototype.clone = function() {
-    return new Fraction(this.numerator, this.denominator);
-};
-/* pretty-printer, converts fractions into whole numbers and fractions */ Fraction.prototype.toString = function() {
-    if (this.denominator === "NaN") return "NaN";
-    var wholepart = this.numerator / this.denominator > 0 ? Math.floor(this.numerator / this.denominator) : Math.ceil(this.numerator / this.denominator);
-    var numerator = this.numerator % this.denominator;
-    var denominator = this.denominator;
-    var result = [];
-    if (wholepart != 0) result.push(wholepart);
-    if (numerator != 0) result.push((wholepart === 0 ? numerator : Math.abs(numerator)) + "/" + denominator);
-    return result.length > 0 ? result.join(" ") : 0;
-};
-/* destructively rescale the fraction by some integral factor */ Fraction.prototype.rescale = function(factor) {
-    this.numerator *= factor;
-    this.denominator *= factor;
-    return this;
-};
-Fraction.prototype.add = function(b) {
-    var a = this.clone();
-    if (b instanceof Fraction) b = b.clone();
-    else b = new Fraction(b);
-    td = a.denominator;
-    a.rescale(b.denominator);
-    b.rescale(td);
-    a.numerator += b.numerator;
-    return a.normalize();
-};
-Fraction.prototype.subtract = function(b) {
-    var a = this.clone();
-    if (b instanceof Fraction) b = b.clone(); // we scale our argument destructively, so clone
-    else b = new Fraction(b);
-    td = a.denominator;
-    a.rescale(b.denominator);
-    b.rescale(td);
-    a.numerator -= b.numerator;
-    return a.normalize();
-};
-Fraction.prototype.multiply = function(b) {
-    var a = this.clone();
-    if (b instanceof Fraction) {
-        a.numerator *= b.numerator;
-        a.denominator *= b.denominator;
-    } else if (typeof b === "number") a.numerator *= b;
-    else return a.multiply(new Fraction(b));
-    return a.normalize();
-};
-Fraction.prototype.divide = function(b) {
-    var a = this.clone();
-    if (b instanceof Fraction) {
-        a.numerator *= b.denominator;
-        a.denominator *= b.numerator;
-    } else if (typeof b === "number") a.denominator *= b;
-    else return a.divide(new Fraction(b));
-    return a.normalize();
-};
-Fraction.prototype.equals = function(b) {
-    if (!(b instanceof Fraction)) b = new Fraction(b);
-    // fractions that are equal should have equal normalized forms
-    var a = this.clone().normalize();
-    var b = b.clone().normalize();
-    return a.numerator === b.numerator && a.denominator === b.denominator;
-};
-/* Utility functions */ /* Destructively normalize the fraction to its smallest representation. 
- * e.g. 4/16 -> 1/4, 14/28 -> 1/2, etc.
- * This is called after all math ops.
- */ Fraction.prototype.normalize = function() {
-    var isFloat = function(n) {
-        return typeof n === "number" && (n > 0 && n % 1 > 0 && n % 1 < 1 || n < 0 && n % -1 < 0 && n % -1 > -1);
-    };
-    var roundToPlaces = function(n, places) {
-        if (!places) return Math.round(n);
-        else {
-            var scalar = Math.pow(10, places);
-            return Math.round(n * scalar) / scalar;
-        }
-    };
-    return function() {
-        // XXX hackish.  Is there a better way to address this issue?
-        //
-        /* first check if we have decimals, and if we do eliminate them
-         * multiply by the 10 ^ number of decimal places in the number
-         * round the number to nine decimal places
-         * to avoid js floating point funnies
-         */ if (isFloat(this.denominator)) {
-            var rounded = roundToPlaces(this.denominator, 9);
-            var scaleup = Math.pow(10, rounded.toString().split(".")[1].length);
-            this.denominator = Math.round(this.denominator * scaleup); // this !!! should be a whole number
-            //this.numerator *= scaleup;
-            this.numerator *= scaleup;
-        }
-        if (isFloat(this.numerator)) {
-            var rounded = roundToPlaces(this.numerator, 9);
-            var scaleup = Math.pow(10, rounded.toString().split(".")[1].length);
-            this.numerator = Math.round(this.numerator * scaleup); // this !!! should be a whole number
-            //this.numerator *= scaleup;
-            this.denominator *= scaleup;
-        }
-        var gcf = Fraction.gcf(this.numerator, this.denominator);
-        this.numerator /= gcf;
-        this.denominator /= gcf;
-        if (this.numerator < 0 && this.denominator < 0 || this.numerator > 0 && this.denominator < 0) {
-            this.numerator *= -1;
-            this.denominator *= -1;
-        }
-        return this;
-    };
-}();
-/* Takes two numbers and returns their greatest common factor.
- */ Fraction.gcf = function(a, b) {
-    var common_factors = [];
-    var fa = Fraction.primeFactors(a);
-    var fb = Fraction.primeFactors(b);
-    // for each factor in fa
-    // if it's also in fb
-    // put it into the common factors
-    fa.forEach(function(factor) {
-        var i = fb.indexOf(factor);
-        if (i >= 0) {
-            common_factors.push(factor);
-            fb.splice(i, 1); // remove from fb
-        }
-    });
-    if (common_factors.length === 0) return 1;
-    var gcf = function() {
-        var r = common_factors[0];
-        var i;
-        for(i = 1; i < common_factors.length; i++)r = r * common_factors[i];
-        return r;
-    }();
-    return gcf;
-};
-// Adapted from: 
-// http://www.btinternet.com/~se16/js/factor.htm
-Fraction.primeFactors = function(n) {
-    var num1 = Math.abs(n);
-    var factors = [];
-    var _factor = 2; // first potential prime factor
-    while(_factor * _factor <= num1)if (num1 % _factor === 0) {
-        factors.push(_factor); // so keep it
-        num1 = num1 / _factor; // and divide our search point by it
-    } else _factor++; // and increment
-    if (num1 != 1) factors.push(num1); //    so it too should be recorded
-    return factors; // Return the prime factors
-};
-module.exports.Fraction = Fraction;
 
 },{}]},["aD7Zm","aenu9"], "aenu9", "parcelRequire3a11")
 
