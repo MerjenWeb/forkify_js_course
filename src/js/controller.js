@@ -9,9 +9,9 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { async } from 'regenerator-runtime/runtime';
 
-if (module.hot) {
-  module.hot.accept(); // not js, coming from parcel
-}
+// if (module.hot) {
+//   module.hot.accept(); // not js, coming from parcel
+// }
 
 // controller - 1. Bridge between model and views(which don't know about each other) (updating user interface(view) and ask the model for some data (model)); 2) Handles UI events and dispatches tasks to model and view;
 
@@ -50,7 +50,7 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     // 3) Render results
-    resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
   } catch (err) {
     console.log(err);
   }
