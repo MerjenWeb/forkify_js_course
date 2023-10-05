@@ -2,15 +2,22 @@
 import { API_URL } from './config.js';
 import { getJSON } from './helpers.js';
 
+// State contains all the data that we need in order to build our application
 export const state = {
   recipe: {},
+  search: {
+    query: '',
+    results: [],
+  },
 };
 
 // This function is not going to return anything, all it will do is to change our state object
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}/${id}`);
-    console.log(data);
+    // const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes';
+    // https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcd09
+    // https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza
 
     // we have recipe on both sides, so we can use destructuring
     // let recipe = data.data.recipe;
@@ -31,3 +38,25 @@ export const loadRecipe = async function (id) {
     throw err;
   }
 };
+
+export const loadSearchResults = async function (query) {
+  try {
+    state.search.query = query;
+
+    const data = await getJSON(`${API_URL}?search=${query}`);
+
+    state.search.results = data.data.recipes.map(rec => {
+      return {
+        id: rec.id,
+        title: rec.title,
+        publisher: rec.publisher,
+        image: rec.image_url,
+      };
+    });
+  } catch (err) {
+    console.error(`${err}!!!`);
+    throw err;
+  }
+};
+
+// loadSearchResults('pizza');

@@ -2,4 +2,6 @@
 
 // Using uppercase. because this constant will never change :
 export const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes';
+// https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcd09
+// https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza
 export const TIMEOUT_SEC = 30;
