@@ -3,6 +3,7 @@ import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
+import paginationView from './views/paginationView.js';
 
 // Importing polyfills
 import 'core-js/stable';
@@ -50,15 +51,28 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     // 3) Render results
-    resultsView.render(model.getSearchResultsPage());
+    resultsView.render(model.getSearchResultsPage(4));
+
+    // 4) Render initial pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     console.log(err);
   }
 };
 
+const controlPagination = function (goToPage) {
+  // 1) Render new results
+  // This actually works because render will overwrite the markup that was there previously. And the reason for that is that we there have the clear method. And so before any new HTML is inserted into the page, the parentElement is first cleared, and so then that means that render overwrites everything that was there and puts the new content in the same place.
+  resultsView.render(model.getSearchResultsPage(goToPage));
+
+  // 4) Render new pagination buttons
+  paginationView.render(model.state.search);
+};
+
 const init = function () {
   recipeView.addHandlerRender(controlRecipes); // subscriber
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination); // this will call addHandlerClick function from the paginationView.js which in turn will call addEventListener, so we can start listening for the click event on the pagination element
 };
 
 init();
