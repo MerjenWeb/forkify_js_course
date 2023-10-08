@@ -2,7 +2,7 @@
 import { API_URL, RES_PER_PAGE } from './config.js';
 import { getJSON } from './helpers.js';
 
-// State contains all the data that we need in order to build our application
+// State contains all the data that we need in order to build our application (model.js is all about data)
 export const state = {
   recipe: {},
   search: {
@@ -86,12 +86,18 @@ export const updateServings = function (newServings) {
   });
 };
 
+const persistBookmarks = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+
 export const addBookmark = function (recipe) {
   // Add bookmark
   state.bookmarks.push(recipe);
 
   // Mark current recipe as bookmarked
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+
+  persistBookmarks();
 };
 
 export const deleteBookmark = function (id) {
@@ -101,4 +107,18 @@ export const deleteBookmark = function (id) {
 
   // Mark current recipe as NOT bookmarked
   if (id === state.recipe.id) state.recipe.bookmarked = false;
+
+  persistBookmarks();
 };
+
+// Taking out of localStorage
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage); // converting the string back to an object
+};
+init();
+
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};
+// clearBookmarks();

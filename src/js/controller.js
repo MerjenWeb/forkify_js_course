@@ -4,6 +4,7 @@ import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
+import bookmarksView from './views/bookmarksView.js';
 
 // Importing polyfills
 import 'core-js/stable';
@@ -29,16 +30,20 @@ const controlRecipes = async function () {
     // 0) Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage());
 
-    // 1) Loading Recipe
+    // 1) Updating bookmarks view
+    bookmarksView.update(model.state.bookmarks);
+
+    // 2) Loading Recipe
     // loadRecipe is an async function and therefore, it is going to return a promise, therefore we have to await that promise before we can move on in the next step in the execution of this async fucntion
     await model.loadRecipe(id);
 
-    // Rendering Recipe (using the loaded data)
+    // 3) Rendering Recipe (using the loaded data)
     recipeView.render(model.state.recipe);
 
     // catching the error
   } catch (err) {
     recipeView.renderError();
+    console.error(err);
   }
 };
 
@@ -82,13 +87,23 @@ const controlServings = function (newServings) {
 };
 
 const controlAddBookmark = function () {
+  // 1) Add or remove a bookmark
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
   else model.deleteBookmark(model.state.recipe.id);
-  console.log(model.state.recipe);
+
+  // 2) Update recipe view
   recipeView.update(model.state.recipe);
+
+  // 3) Render bookmarks
+  bookmarksView.render(model.state.bookmarks);
+};
+
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks);
 };
 
 const init = function () {
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes); // subscriber
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
