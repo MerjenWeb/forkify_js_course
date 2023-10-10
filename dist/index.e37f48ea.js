@@ -697,34 +697,364 @@ const init = function() {
 };
 init();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./model.js":"Y4A21","./views/recipeView.js":"l60JC","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","./views/searchView.js":"9OQAM","./views/resultsView.js":"cSbZE","./views/paginationView.js":"6z7bi","./views/bookmarksView.js":"4Lqzq","./views/addRecipeView.js":"i6DNj","./config.js":"k5Hzs"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
+},{"core-js/modules/web.immediate.js":"49tUX","./model.js":"Y4A21","./config.js":"k5Hzs","./views/recipeView.js":"l60JC","./views/searchView.js":"9OQAM","./views/resultsView.js":"cSbZE","./views/paginationView.js":"6z7bi","./views/bookmarksView.js":"4Lqzq","./views/addRecipeView.js":"i6DNj","regenerator-runtime/runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"49tUX":[function(require,module,exports) {
+var $export = require("af507ce87e41a20c");
+var $task = require("f3e37c42365e6105");
+$export($export.G + $export.B, {
+    setImmediate: $task.set,
+    clearImmediate: $task.clear
+});
+
+},{"af507ce87e41a20c":"1Tgvm","f3e37c42365e6105":"bPiT9"}],"1Tgvm":[function(require,module,exports) {
+var global = require("42f6b821d919e9e3");
+var core = require("c78b0a9a56aa2fa8");
+var hide = require("31d57f90251ab520");
+var redefine = require("ced7c23f8cd6b0bf");
+var ctx = require("242cc4d0fd4e0ba");
+var PROTOTYPE = "prototype";
+var $export = function(type, name, source) {
+    var IS_FORCED = type & $export.F;
+    var IS_GLOBAL = type & $export.G;
+    var IS_STATIC = type & $export.S;
+    var IS_PROTO = type & $export.P;
+    var IS_BIND = type & $export.B;
+    var target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE];
+    var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+    var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
+    var key, own, out, exp;
+    if (IS_GLOBAL) source = name;
+    for(key in source){
+        // contains in native
+        own = !IS_FORCED && target && target[key] !== undefined;
+        // export native or passed
+        out = (own ? target : source)[key];
+        // bind timers to global for call from export context
+        exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && typeof out == "function" ? ctx(Function.call, out) : out;
+        // extend global
+        if (target) redefine(target, key, out, type & $export.U);
+        // export
+        if (exports[key] != out) hide(exports, key, exp);
+        if (IS_PROTO && expProto[key] != out) expProto[key] = out;
+    }
+};
+global.core = core;
+// type bitmap
+$export.F = 1; // forced
+$export.G = 2; // global
+$export.S = 4; // static
+$export.P = 8; // proto
+$export.B = 16; // bind
+$export.W = 32; // wrap
+$export.U = 64; // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+},{"42f6b821d919e9e3":"8xCse","c78b0a9a56aa2fa8":"4o9Ko","31d57f90251ab520":"ddpVq","ced7c23f8cd6b0bf":"9vAu7","242cc4d0fd4e0ba":"4rQSm"}],"8xCse":[function(require,module,exports) {
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != "undefined" && window.Math == Math ? window : typeof self != "undefined" && self.Math == Math ? self : Function("return this")();
+if (typeof __g == "number") __g = global; // eslint-disable-line no-undef
+
+},{}],"4o9Ko":[function(require,module,exports) {
+var core = module.exports = {
+    version: "2.6.12"
+};
+if (typeof __e == "number") __e = core; // eslint-disable-line no-undef
+
+},{}],"ddpVq":[function(require,module,exports) {
+var dP = require("d8943525bab1b2ec");
+var createDesc = require("25bf6cacb7cbb32e");
+module.exports = require("2ee055831716c8bb") ? function(object, key, value) {
+    return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value) {
+    object[key] = value;
+    return object;
+};
+
+},{"d8943525bab1b2ec":"cLcWd","25bf6cacb7cbb32e":"825qY","2ee055831716c8bb":"dr2tY"}],"cLcWd":[function(require,module,exports) {
+var anObject = require("b930f648b0f27382");
+var IE8_DOM_DEFINE = require("f0c219e68320c9ed");
+var toPrimitive = require("c690e12f2fe9bab0");
+var dP = Object.defineProperty;
+exports.f = require("1bceab5c9179ba04") ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+    anObject(O);
+    P = toPrimitive(P, true);
+    anObject(Attributes);
+    if (IE8_DOM_DEFINE) try {
+        return dP(O, P, Attributes);
+    } catch (e) {}
+    if ("get" in Attributes || "set" in Attributes) throw TypeError("Accessors not supported!");
+    if ("value" in Attributes) O[P] = Attributes.value;
+    return O;
+};
+
+},{"b930f648b0f27382":"kiL2X","f0c219e68320c9ed":"cIJOj","c690e12f2fe9bab0":"4Oubb","1bceab5c9179ba04":"dr2tY"}],"kiL2X":[function(require,module,exports) {
+var isObject = require("56587b8863452108");
+module.exports = function(it) {
+    if (!isObject(it)) throw TypeError(it + " is not an object!");
+    return it;
+};
+
+},{"56587b8863452108":"eIE5K"}],"eIE5K":[function(require,module,exports) {
+module.exports = function(it) {
+    return typeof it === "object" ? it !== null : typeof it === "function";
+};
+
+},{}],"cIJOj":[function(require,module,exports) {
+module.exports = !require("a100528cf6641f10") && !require("ae70d15ac8e4b8ac")(function() {
+    return Object.defineProperty(require("e10245d0320221b6")("div"), "a", {
+        get: function() {
+            return 7;
+        }
+    }).a != 7;
+});
+
+},{"a100528cf6641f10":"dr2tY","ae70d15ac8e4b8ac":"iAFH1","e10245d0320221b6":"2qBag"}],"dr2tY":[function(require,module,exports) {
+// Thank's IE8 for his funny defineProperty
+module.exports = !require("c3ddebb06976432e")(function() {
+    return Object.defineProperty({}, "a", {
+        get: function() {
+            return 7;
+        }
+    }).a != 7;
+});
+
+},{"c3ddebb06976432e":"iAFH1"}],"iAFH1":[function(require,module,exports) {
+module.exports = function(exec) {
+    try {
+        return !!exec();
+    } catch (e) {
+        return true;
+    }
+};
+
+},{}],"2qBag":[function(require,module,exports) {
+var isObject = require("f5128ecc02fb78bd");
+var document = require("e008eb78a0a4d5d9").document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function(it) {
+    return is ? document.createElement(it) : {};
+};
+
+},{"f5128ecc02fb78bd":"eIE5K","e008eb78a0a4d5d9":"8xCse"}],"4Oubb":[function(require,module,exports) {
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require("c2dffef8c8a7e11e");
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S) {
+    if (!isObject(it)) return it;
+    var fn, val;
+    if (S && typeof (fn = it.toString) == "function" && !isObject(val = fn.call(it))) return val;
+    if (typeof (fn = it.valueOf) == "function" && !isObject(val = fn.call(it))) return val;
+    if (!S && typeof (fn = it.toString) == "function" && !isObject(val = fn.call(it))) return val;
+    throw TypeError("Can't convert object to primitive value");
+};
+
+},{"c2dffef8c8a7e11e":"eIE5K"}],"825qY":[function(require,module,exports) {
+module.exports = function(bitmap, value) {
+    return {
+        enumerable: !(bitmap & 1),
+        configurable: !(bitmap & 2),
+        writable: !(bitmap & 4),
+        value: value
     };
 };
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
+
+},{}],"9vAu7":[function(require,module,exports) {
+var global = require("3b38cb7bba0034de");
+var hide = require("37b3e928e2cfb7b2");
+var has = require("bd4fb43c56216f66");
+var SRC = require("47999eeb3f9b97e1")("src");
+var $toString = require("212e71942acb17f");
+var TO_STRING = "toString";
+var TPL = ("" + $toString).split(TO_STRING);
+require("bd522f9ac2f77541").inspectSource = function(it) {
+    return $toString.call(it);
 };
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
+(module.exports = function(O, key, val, safe) {
+    var isFunction = typeof val == "function";
+    if (isFunction) has(val, "name") || hide(val, "name", key);
+    if (O[key] === val) return;
+    if (isFunction) has(val, SRC) || hide(val, SRC, O[key] ? "" + O[key] : TPL.join(String(key)));
+    if (O === global) O[key] = val;
+    else if (!safe) {
+        delete O[key];
+        hide(O, key, val);
+    } else if (O[key]) O[key] = val;
+    else hide(O, key, val);
+// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+})(Function.prototype, TO_STRING, function toString() {
+    return typeof this == "function" && this[SRC] || $toString.call(this);
+});
+
+},{"3b38cb7bba0034de":"8xCse","37b3e928e2cfb7b2":"ddpVq","bd4fb43c56216f66":"biQ7v","47999eeb3f9b97e1":"gBq6n","212e71942acb17f":"5IPoO","bd522f9ac2f77541":"4o9Ko"}],"biQ7v":[function(require,module,exports) {
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function(it, key) {
+    return hasOwnProperty.call(it, key);
 };
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
+
+},{}],"gBq6n":[function(require,module,exports) {
+var id = 0;
+var px = Math.random();
+module.exports = function(key) {
+    return "Symbol(".concat(key === undefined ? "" : key, ")_", (++id + px).toString(36));
+};
+
+},{}],"5IPoO":[function(require,module,exports) {
+module.exports = require("a0b71ba6307b2840")("native-function-to-string", Function.toString);
+
+},{"a0b71ba6307b2840":"9XC5J"}],"9XC5J":[function(require,module,exports) {
+var core = require("90e03ff0cf1ea41f");
+var global = require("61da234d01f94041");
+var SHARED = "__core-js_shared__";
+var store = global[SHARED] || (global[SHARED] = {});
+(module.exports = function(key, value) {
+    return store[key] || (store[key] = value !== undefined ? value : {});
+})("versions", []).push({
+    version: core.version,
+    mode: require("25c466c2e133b76a") ? "pure" : "global",
+    copyright: "\xa9 2020 Denis Pushkarev (zloirock.ru)"
+});
+
+},{"90e03ff0cf1ea41f":"4o9Ko","61da234d01f94041":"8xCse","25c466c2e133b76a":"lmtqY"}],"lmtqY":[function(require,module,exports) {
+module.exports = false;
+
+},{}],"4rQSm":[function(require,module,exports) {
+// optional / simple context binding
+var aFunction = require("2e030b8cbf2f950a");
+module.exports = function(fn, that, length) {
+    aFunction(fn);
+    if (that === undefined) return fn;
+    switch(length){
+        case 1:
+            return function(a) {
+                return fn.call(that, a);
+            };
+        case 2:
+            return function(a, b) {
+                return fn.call(that, a, b);
+            };
+        case 3:
+            return function(a, b, c) {
+                return fn.call(that, a, b, c);
+            };
+    }
+    return function() {
+        return fn.apply(that, arguments);
+    };
+};
+
+},{"2e030b8cbf2f950a":"55L9l"}],"55L9l":[function(require,module,exports) {
+module.exports = function(it) {
+    if (typeof it != "function") throw TypeError(it + " is not a function!");
+    return it;
+};
+
+},{}],"bPiT9":[function(require,module,exports) {
+var ctx = require("32356da8c45c3f2c");
+var invoke = require("fb4cc083a1a0dab7");
+var html = require("4c3e5a730f62d9d7");
+var cel = require("926c67e3e4b7eb5");
+var global = require("597566726cfd8373");
+var process = global.process;
+var setTask = global.setImmediate;
+var clearTask = global.clearImmediate;
+var MessageChannel = global.MessageChannel;
+var Dispatch = global.Dispatch;
+var counter = 0;
+var queue = {};
+var ONREADYSTATECHANGE = "onreadystatechange";
+var defer, channel, port;
+var run = function() {
+    var id = +this;
+    // eslint-disable-next-line no-prototype-builtins
+    if (queue.hasOwnProperty(id)) {
+        var fn = queue[id];
+        delete queue[id];
+        fn();
+    }
+};
+var listener = function(event) {
+    run.call(event.data);
+};
+// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+if (!setTask || !clearTask) {
+    setTask = function setImmediate(fn) {
+        var args = [];
+        var i = 1;
+        while(arguments.length > i)args.push(arguments[i++]);
+        queue[++counter] = function() {
+            // eslint-disable-next-line no-new-func
+            invoke(typeof fn == "function" ? fn : Function(fn), args);
+        };
+        defer(counter);
+        return counter;
+    };
+    clearTask = function clearImmediate(id) {
+        delete queue[id];
+    };
+    // Node.js 0.8-
+    if (require("319575ec41286486")(process) == "process") defer = function(id) {
+        process.nextTick(ctx(run, id, 1));
+    };
+    else if (Dispatch && Dispatch.now) defer = function(id) {
+        Dispatch.now(ctx(run, id, 1));
+    };
+    else if (MessageChannel) {
+        channel = new MessageChannel();
+        port = channel.port2;
+        channel.port1.onmessage = listener;
+        defer = ctx(port.postMessage, port, 1);
+    // Browsers with postMessage, skip WebWorkers
+    // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+    } else if (global.addEventListener && typeof postMessage == "function" && !global.importScripts) {
+        defer = function(id) {
+            global.postMessage(id + "", "*");
+        };
+        global.addEventListener("message", listener, false);
+    // IE8-
+    } else if (ONREADYSTATECHANGE in cel("script")) defer = function(id) {
+        html.appendChild(cel("script"))[ONREADYSTATECHANGE] = function() {
+            html.removeChild(this);
+            run.call(id);
+        };
+    };
+    else defer = function(id) {
+        setTimeout(ctx(run, id, 1), 0);
+    };
+}
+module.exports = {
+    set: setTask,
+    clear: clearTask
+};
+
+},{"32356da8c45c3f2c":"4rQSm","fb4cc083a1a0dab7":"c7Bab","4c3e5a730f62d9d7":"lPhWk","926c67e3e4b7eb5":"2qBag","597566726cfd8373":"8xCse","319575ec41286486":"frIbo"}],"c7Bab":[function(require,module,exports) {
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+module.exports = function(fn, args, that) {
+    var un = that === undefined;
+    switch(args.length){
+        case 0:
+            return un ? fn() : fn.call(that);
+        case 1:
+            return un ? fn(args[0]) : fn.call(that, args[0]);
+        case 2:
+            return un ? fn(args[0], args[1]) : fn.call(that, args[0], args[1]);
+        case 3:
+            return un ? fn(args[0], args[1], args[2]) : fn.call(that, args[0], args[1], args[2]);
+        case 4:
+            return un ? fn(args[0], args[1], args[2], args[3]) : fn.call(that, args[0], args[1], args[2], args[3]);
+    }
+    return fn.apply(that, args);
+};
+
+},{}],"lPhWk":[function(require,module,exports) {
+var document = require("4f8d3f9801bd0f96").document;
+module.exports = document && document.documentElement;
+
+},{"4f8d3f9801bd0f96":"8xCse"}],"frIbo":[function(require,module,exports) {
+var toString = {}.toString;
+module.exports = function(it) {
+    return toString.call(it).slice(8, -1);
 };
 
 },{}],"Y4A21":[function(require,module,exports) {
@@ -876,7 +1206,7 @@ const uploadRecipe = async function(newRecipe) {
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs","./helpers.js":"hGI1E"}],"k5Hzs":[function(require,module,exports) {
+},{"./config.js":"k5Hzs","./helpers.js":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k5Hzs":[function(require,module,exports) {
 // Into this file we put all the variables that should be constants and should be reused across the project (the variables that we want here are the ones that are responsible for defining some important data). The goal of having this file with all these variables is that it will allow us to easily configure (формировать) or project by simply changing some data that is here in this configuration file
 // Using uppercase. because this constant will never change :
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -892,7 +1222,37 @@ const RES_PER_PAGE = 10;
 const KEY = "70ae57c3-8e2a-4817-bf7e-8d6d86c5b791";
 const MODAL_CLOSE_SEC = 2.5;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGI1E":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"hGI1E":[function(require,module,exports) {
 // The goal of this file is to contain a couple of functions that we reuse over and over in our project
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -960,7 +1320,7 @@ export const sendJSON = async function (url, uploadData) {
 };
 */ 
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs"}],"l60JC":[function(require,module,exports) {
+},{"./config.js":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l60JC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -1094,7 +1454,92 @@ class RecipeView extends (0, _viewJsDefault.default) {
 }
 exports.default = new RecipeView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp","fractional":"3SU56","./View.js":"5cUXS"}],"loVOp":[function(require,module,exports) {
+},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","fractional":"3SU56","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5cUXS":[function(require,module,exports) {
+// import icons from '../img/icons.svg'; - Parcel 1
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parcel 2
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class View {
+    _data;
+    // JSDoc
+    /**
+   * Render the received object to the DOM
+   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
+   * @param {boolean} [render=true] If false creates markup string instead of rendering to the DOM
+   * @returns {undefined | string} A markup string is returned if render=false
+   * @this {Object} View instance
+   * @author Merjen
+   * @todo Finish implementation
+   */ render(data, render = true) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
+        this._data = data;
+        const markup = this._generateMarkup();
+        if (!render) return markup;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    update(data) {
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+        // a trick to convert the markup string to a DOM object thats living in the memory and that we can use to compare with the actual DOM that's on the page
+        // newDOM is not really living on the page, but it lives in our memory, so we can use that DOM as if it was real DOM on our page
+        const newDOM = document.createRange().createContextualFragment(newMarkup);
+        const newElements = Array.from(newDOM.querySelectorAll("*"));
+        const curElements = Array.from(this._parentElement.querySelectorAll("*"));
+        newElements.forEach((newEl, i)=>{
+            const curEl = curElements[i];
+            // Updates changed TEXT
+            if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") // console.log('@@@', newEl.firstChild.nodeValue.trim());
+            curEl.textContent = newEl.textContent;
+            // Updates changed ATTRIBUTES
+            if (!newEl.isEqualNode(curEl)) Array.from(newEl.attributes).forEach((attr)=>curEl.setAttribute(attr.name, attr.value));
+        });
+    }
+    _clear() {
+        this._parentElement.innerHTML = "";
+    }
+    renderSpinner() {
+        const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+      </svg>
+    </div>
+  `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderError(message = this._errorMessage) {
+        const markup = `
+    <div class="error">
+     <div>
+       <svg>
+         <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+       </svg>
+     </div>
+     <p>${message}</p>
+   </div>`;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this._message) {
+        const markup = `
+    <div class="message">
+     <div>
+       <svg>
+         <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+       </svg>
+     </div>
+     <p>${message}</p>
+   </div>`;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+}
+exports.default = View;
+
+},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"loVOp":[function(require,module,exports) {
 module.exports = require("9bcc84ee5d265e38").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
 
 },{"9bcc84ee5d265e38":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -1385,433 +1830,216 @@ Fraction.primeFactors = function(n) {
 };
 module.exports.Fraction = Fraction;
 
-},{}],"5cUXS":[function(require,module,exports) {
-// import icons from '../img/icons.svg'; - Parcel 1
+},{}],"9OQAM":[function(require,module,exports) {
+// we create the class, and we will then NOT export that class, but ecport an instance (object) that was created by this class
+// this class is used to get the query and listen for the click event
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _iconsSvg = require("url:../../img/icons.svg"); // Parcel 2
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class View {
-    _data;
-    // JSDoc
-    /**
-   * Render the received object to the DOM
-   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
-   * @param {boolean} [render=true] If false creates markup string instead of rendering to the DOM
-   * @returns {undefined | string} A markup string is returned if render=false
-   * @this {Object} View instance
-   * @author Merjen
-   * @todo Finish implementation
-   */ render(data, render = true) {
-        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
-        this._data = data;
-        const markup = this._generateMarkup();
-        if (!render) return markup;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+class SearchView {
+    _parentElement = document.querySelector(".search");
+    getQuery() {
+        const query = this._parentElement.querySelector(".search__field").value;
+        this._clearInput();
+        return query;
     }
-    update(data) {
-        this._data = data;
-        const newMarkup = this._generateMarkup();
-        // a trick to convert the markup string to a DOM object thats living in the memory and that we can use to compare with the actual DOM that's on the page
-        // newDOM is not really living on the page, but it lives in our memory, so we can use that DOM as if it was real DOM on our page
-        const newDOM = document.createRange().createContextualFragment(newMarkup);
-        const newElements = Array.from(newDOM.querySelectorAll("*"));
-        const curElements = Array.from(this._parentElement.querySelectorAll("*"));
-        newElements.forEach((newEl, i)=>{
-            const curEl = curElements[i];
-            // Updates changed TEXT
-            if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") // console.log('@@@', newEl.firstChild.nodeValue.trim());
-            curEl.textContent = newEl.textContent;
-            // Updates changed ATTRIBUTES
-            if (!newEl.isEqualNode(curEl)) Array.from(newEl.attributes).forEach((attr)=>curEl.setAttribute(attr.name, attr.value));
+    _clearInput() {
+        this._parentElement.querySelector(".search__field").value = "";
+    }
+    addHandlerSearch(handler) {
+        // the listener is added to the form, not to the button, because the form will listen to the submit event, so either button or pressing the enter key
+        this._parentElement.addEventListener("submit", function(e) {
+            // preventDefault() because otherwise the page is going to reload
+            e.preventDefault();
+            handler();
         });
     }
-    _clear() {
-        this._parentElement.innerHTML = "";
+}
+exports.default = new SearchView();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cSbZE":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _previewViewJs = require("./previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
+var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class ResultsView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".results");
+    _errorMessage = "No recipes found for your query! Please try again ;)";
+    _message = "";
+    _generateMarkup() {
+        return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join("");
     }
-    renderSpinner() {
-        const markup = `
-    <div class="spinner">
+}
+exports.default = new ResultsView();
+
+},{"./View.js":"5cUXS","./previewView.js":"1FDQ6","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1FDQ6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class PreviewView extends (0, _viewJsDefault.default) {
+    _parentElement = "";
+    _generateMarkup(result) {
+        const id = window.location.hash.slice(1);
+        return `
+<li class="preview">
+  <a class="preview__link ${this._data.id === id ? "preview__link--active" : ""}" href="#${this._data.id}">
+    <figure class="preview__fig">
+      <img src="${this._data.image}" alt="${this._data.title}" />
+    </figure>
+    <div class="preview__data">
+      <h4 class="preview__title">${this._data.title}</h4>
+      <p class="preview__publisher">${this._data.publisher}</p>
+      <div class="preview__user-generated ${this._data.key ? "" : "hidden"}">
       <svg>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+      <use href="${0, _iconsSvgDefault.default}#icon-user"></use>
       </svg>
     </div>
+  </div>
+  </a>
+</li>
   `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderError(message = this._errorMessage) {
-        const markup = `
-    <div class="error">
-     <div>
-       <svg>
-         <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
-       </svg>
-     </div>
-     <p>${message}</p>
-   </div>`;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderMessage(message = this._message) {
-        const markup = `
-    <div class="message">
-     <div>
-       <svg>
-         <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
-       </svg>
-     </div>
-     <p>${message}</p>
-   </div>`;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
 }
-exports.default = View;
+exports.default = new PreviewView();
 
-},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"49tUX":[function(require,module,exports) {
-var $export = require("af507ce87e41a20c");
-var $task = require("f3e37c42365e6105");
-$export($export.G + $export.B, {
-    setImmediate: $task.set,
-    clearImmediate: $task.clear
-});
-
-},{"af507ce87e41a20c":"1Tgvm","f3e37c42365e6105":"bPiT9"}],"1Tgvm":[function(require,module,exports) {
-var global = require("42f6b821d919e9e3");
-var core = require("c78b0a9a56aa2fa8");
-var hide = require("31d57f90251ab520");
-var redefine = require("ced7c23f8cd6b0bf");
-var ctx = require("242cc4d0fd4e0ba");
-var PROTOTYPE = "prototype";
-var $export = function(type, name, source) {
-    var IS_FORCED = type & $export.F;
-    var IS_GLOBAL = type & $export.G;
-    var IS_STATIC = type & $export.S;
-    var IS_PROTO = type & $export.P;
-    var IS_BIND = type & $export.B;
-    var target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {})[PROTOTYPE];
-    var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
-    var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
-    var key, own, out, exp;
-    if (IS_GLOBAL) source = name;
-    for(key in source){
-        // contains in native
-        own = !IS_FORCED && target && target[key] !== undefined;
-        // export native or passed
-        out = (own ? target : source)[key];
-        // bind timers to global for call from export context
-        exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && typeof out == "function" ? ctx(Function.call, out) : out;
-        // extend global
-        if (target) redefine(target, key, out, type & $export.U);
-        // export
-        if (exports[key] != out) hide(exports, key, exp);
-        if (IS_PROTO && expProto[key] != out) expProto[key] = out;
+},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6z7bi":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class PaginationView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".pagination");
+    addHandlerClick(handler) {
+        this._parentElement.addEventListener("click", function(e) {
+            // closest method is like querySelector, but instead of searching down in the tree, it searches UP in the tree
+            // creating a new controller that will be executed whenever a click happens
+            const btn = e.target.closest(".btn--inline");
+            if (!btn) return;
+            const goToPage = +btn.dataset.goto;
+            handler(goToPage);
+        });
     }
-};
-global.core = core;
-// type bitmap
-$export.F = 1; // forced
-$export.G = 2; // global
-$export.S = 4; // static
-$export.P = 8; // proto
-$export.B = 16; // bind
-$export.W = 32; // wrap
-$export.U = 64; // safe
-$export.R = 128; // real proto method for `library`
-module.exports = $export;
-
-},{"42f6b821d919e9e3":"8xCse","c78b0a9a56aa2fa8":"4o9Ko","31d57f90251ab520":"ddpVq","ced7c23f8cd6b0bf":"9vAu7","242cc4d0fd4e0ba":"4rQSm"}],"8xCse":[function(require,module,exports) {
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != "undefined" && window.Math == Math ? window : typeof self != "undefined" && self.Math == Math ? self : Function("return this")();
-if (typeof __g == "number") __g = global; // eslint-disable-line no-undef
-
-},{}],"4o9Ko":[function(require,module,exports) {
-var core = module.exports = {
-    version: "2.5.7"
-};
-if (typeof __e == "number") __e = core; // eslint-disable-line no-undef
-
-},{}],"ddpVq":[function(require,module,exports) {
-var dP = require("d8943525bab1b2ec");
-var createDesc = require("25bf6cacb7cbb32e");
-module.exports = require("2ee055831716c8bb") ? function(object, key, value) {
-    return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value) {
-    object[key] = value;
-    return object;
-};
-
-},{"d8943525bab1b2ec":"cLcWd","25bf6cacb7cbb32e":"825qY","2ee055831716c8bb":"dr2tY"}],"cLcWd":[function(require,module,exports) {
-var anObject = require("b930f648b0f27382");
-var IE8_DOM_DEFINE = require("f0c219e68320c9ed");
-var toPrimitive = require("c690e12f2fe9bab0");
-var dP = Object.defineProperty;
-exports.f = require("1bceab5c9179ba04") ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-    anObject(O);
-    P = toPrimitive(P, true);
-    anObject(Attributes);
-    if (IE8_DOM_DEFINE) try {
-        return dP(O, P, Attributes);
-    } catch (e) {}
-    if ("get" in Attributes || "set" in Attributes) throw TypeError("Accessors not supported!");
-    if ("value" in Attributes) O[P] = Attributes.value;
-    return O;
-};
-
-},{"b930f648b0f27382":"kiL2X","f0c219e68320c9ed":"cIJOj","c690e12f2fe9bab0":"4Oubb","1bceab5c9179ba04":"dr2tY"}],"kiL2X":[function(require,module,exports) {
-var isObject = require("56587b8863452108");
-module.exports = function(it) {
-    if (!isObject(it)) throw TypeError(it + " is not an object!");
-    return it;
-};
-
-},{"56587b8863452108":"eIE5K"}],"eIE5K":[function(require,module,exports) {
-module.exports = function(it) {
-    return typeof it === "object" ? it !== null : typeof it === "function";
-};
-
-},{}],"cIJOj":[function(require,module,exports) {
-module.exports = !require("a100528cf6641f10") && !require("ae70d15ac8e4b8ac")(function() {
-    return Object.defineProperty(require("e10245d0320221b6")("div"), "a", {
-        get: function() {
-            return 7;
-        }
-    }).a != 7;
-});
-
-},{"a100528cf6641f10":"dr2tY","ae70d15ac8e4b8ac":"iAFH1","e10245d0320221b6":"2qBag"}],"dr2tY":[function(require,module,exports) {
-// Thank's IE8 for his funny defineProperty
-module.exports = !require("c3ddebb06976432e")(function() {
-    return Object.defineProperty({}, "a", {
-        get: function() {
-            return 7;
-        }
-    }).a != 7;
-});
-
-},{"c3ddebb06976432e":"iAFH1"}],"iAFH1":[function(require,module,exports) {
-module.exports = function(exec) {
-    try {
-        return !!exec();
-    } catch (e) {
-        return true;
+    _generateMarkup() {
+        const curPage = this._data.page;
+        const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+        // Page 1, and there are other pages
+        if (curPage === 1 && numPages > 1) return `
+         <button data-goto=${curPage + 1} class="btn--inline pagination__btn--next">
+            <span>Page ${curPage + 1}</span>
+            <svg class="search__icon">
+              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+            </svg>
+          </button>
+      `;
+        // Last page
+        if (curPage === numPages && numPages > 1) return `
+   <button data-goto=${curPage - 1} class="btn--inline pagination__btn--prev">
+      <svg class="search__icon">
+        <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+      </svg>
+      <span>Page ${curPage - 1}</span>
+    </button>
+    `;
+        // Other page
+        if (curPage < numPages) return `
+      <button data-goto=${curPage - 1} class="btn--inline pagination__btn--prev">
+         <svg class="search__icon">
+           <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+         </svg>
+         <span>Page ${curPage - 1}</span>
+       </button>
+       <button data-goto=${curPage + 1} class="btn--inline pagination__btn--next">
+            <span>Page ${curPage + 1}</span>
+            <svg class="search__icon">
+              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+            </svg>
+          </button>
+       `;
+        // Page 1, and there are NO other pages
+        return "";
     }
-};
-
-},{}],"2qBag":[function(require,module,exports) {
-var isObject = require("f5128ecc02fb78bd");
-var document = require("e008eb78a0a4d5d9").document;
-// typeof document.createElement is 'object' in old IE
-var is = isObject(document) && isObject(document.createElement);
-module.exports = function(it) {
-    return is ? document.createElement(it) : {};
-};
-
-},{"f5128ecc02fb78bd":"eIE5K","e008eb78a0a4d5d9":"8xCse"}],"4Oubb":[function(require,module,exports) {
-// 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = require("c2dffef8c8a7e11e");
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-module.exports = function(it, S) {
-    if (!isObject(it)) return it;
-    var fn, val;
-    if (S && typeof (fn = it.toString) == "function" && !isObject(val = fn.call(it))) return val;
-    if (typeof (fn = it.valueOf) == "function" && !isObject(val = fn.call(it))) return val;
-    if (!S && typeof (fn = it.toString) == "function" && !isObject(val = fn.call(it))) return val;
-    throw TypeError("Can't convert object to primitive value");
-};
-
-},{"c2dffef8c8a7e11e":"eIE5K"}],"825qY":[function(require,module,exports) {
-module.exports = function(bitmap, value) {
-    return {
-        enumerable: !(bitmap & 1),
-        configurable: !(bitmap & 2),
-        writable: !(bitmap & 4),
-        value: value
-    };
-};
-
-},{}],"9vAu7":[function(require,module,exports) {
-var global = require("3b38cb7bba0034de");
-var hide = require("37b3e928e2cfb7b2");
-var has = require("bd4fb43c56216f66");
-var SRC = require("47999eeb3f9b97e1")("src");
-var TO_STRING = "toString";
-var $toString = Function[TO_STRING];
-var TPL = ("" + $toString).split(TO_STRING);
-require("bd522f9ac2f77541").inspectSource = function(it) {
-    return $toString.call(it);
-};
-(module.exports = function(O, key, val, safe) {
-    var isFunction = typeof val == "function";
-    if (isFunction) has(val, "name") || hide(val, "name", key);
-    if (O[key] === val) return;
-    if (isFunction) has(val, SRC) || hide(val, SRC, O[key] ? "" + O[key] : TPL.join(String(key)));
-    if (O === global) O[key] = val;
-    else if (!safe) {
-        delete O[key];
-        hide(O, key, val);
-    } else if (O[key]) O[key] = val;
-    else hide(O, key, val);
-// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-})(Function.prototype, TO_STRING, function toString() {
-    return typeof this == "function" && this[SRC] || $toString.call(this);
-});
-
-},{"3b38cb7bba0034de":"8xCse","37b3e928e2cfb7b2":"ddpVq","bd4fb43c56216f66":"biQ7v","47999eeb3f9b97e1":"gBq6n","bd522f9ac2f77541":"4o9Ko"}],"biQ7v":[function(require,module,exports) {
-var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function(it, key) {
-    return hasOwnProperty.call(it, key);
-};
-
-},{}],"gBq6n":[function(require,module,exports) {
-var id = 0;
-var px = Math.random();
-module.exports = function(key) {
-    return "Symbol(".concat(key === undefined ? "" : key, ")_", (++id + px).toString(36));
-};
-
-},{}],"4rQSm":[function(require,module,exports) {
-// optional / simple context binding
-var aFunction = require("2e030b8cbf2f950a");
-module.exports = function(fn, that, length) {
-    aFunction(fn);
-    if (that === undefined) return fn;
-    switch(length){
-        case 1:
-            return function(a) {
-                return fn.call(that, a);
-            };
-        case 2:
-            return function(a, b) {
-                return fn.call(that, a, b);
-            };
-        case 3:
-            return function(a, b, c) {
-                return fn.call(that, a, b, c);
-            };
-    }
-    return function() {
-        return fn.apply(that, arguments);
-    };
-};
-
-},{"2e030b8cbf2f950a":"55L9l"}],"55L9l":[function(require,module,exports) {
-module.exports = function(it) {
-    if (typeof it != "function") throw TypeError(it + " is not a function!");
-    return it;
-};
-
-},{}],"bPiT9":[function(require,module,exports) {
-var ctx = require("32356da8c45c3f2c");
-var invoke = require("fb4cc083a1a0dab7");
-var html = require("4c3e5a730f62d9d7");
-var cel = require("926c67e3e4b7eb5");
-var global = require("597566726cfd8373");
-var process = global.process;
-var setTask = global.setImmediate;
-var clearTask = global.clearImmediate;
-var MessageChannel = global.MessageChannel;
-var Dispatch = global.Dispatch;
-var counter = 0;
-var queue = {};
-var ONREADYSTATECHANGE = "onreadystatechange";
-var defer, channel, port;
-var run = function() {
-    var id = +this;
-    // eslint-disable-next-line no-prototype-builtins
-    if (queue.hasOwnProperty(id)) {
-        var fn = queue[id];
-        delete queue[id];
-        fn();
-    }
-};
-var listener = function(event) {
-    run.call(event.data);
-};
-// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
-if (!setTask || !clearTask) {
-    setTask = function setImmediate(fn) {
-        var args = [];
-        var i = 1;
-        while(arguments.length > i)args.push(arguments[i++]);
-        queue[++counter] = function() {
-            // eslint-disable-next-line no-new-func
-            invoke(typeof fn == "function" ? fn : Function(fn), args);
-        };
-        defer(counter);
-        return counter;
-    };
-    clearTask = function clearImmediate(id) {
-        delete queue[id];
-    };
-    // Node.js 0.8-
-    if (require("319575ec41286486")(process) == "process") defer = function(id) {
-        process.nextTick(ctx(run, id, 1));
-    };
-    else if (Dispatch && Dispatch.now) defer = function(id) {
-        Dispatch.now(ctx(run, id, 1));
-    };
-    else if (MessageChannel) {
-        channel = new MessageChannel();
-        port = channel.port2;
-        channel.port1.onmessage = listener;
-        defer = ctx(port.postMessage, port, 1);
-    // Browsers with postMessage, skip WebWorkers
-    // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-    } else if (global.addEventListener && typeof postMessage == "function" && !global.importScripts) {
-        defer = function(id) {
-            global.postMessage(id + "", "*");
-        };
-        global.addEventListener("message", listener, false);
-    // IE8-
-    } else if (ONREADYSTATECHANGE in cel("script")) defer = function(id) {
-        html.appendChild(cel("script"))[ONREADYSTATECHANGE] = function() {
-            html.removeChild(this);
-            run.call(id);
-        };
-    };
-    else defer = function(id) {
-        setTimeout(ctx(run, id, 1), 0);
-    };
 }
-module.exports = {
-    set: setTask,
-    clear: clearTask
-};
+exports.default = new PaginationView(); // Publisher - subscriber pattern for addeventlistener :
+ // that works by creating a publisher,  which is basically a function  which is the one listening for the event,  which receives a handler function,  which in our case, is going to be a controller  that lives in the controller.js.  With this,  we will then be able to listen for the event in the View where it makes sense, while at the same time, being able to handle that event from the controller.
 
-},{"32356da8c45c3f2c":"4rQSm","fb4cc083a1a0dab7":"c7Bab","4c3e5a730f62d9d7":"lPhWk","926c67e3e4b7eb5":"2qBag","597566726cfd8373":"8xCse","319575ec41286486":"frIbo"}],"c7Bab":[function(require,module,exports) {
-// fast apply, http://jsperf.lnkit.com/fast-apply/5
-module.exports = function(fn, args, that) {
-    var un = that === undefined;
-    switch(args.length){
-        case 0:
-            return un ? fn() : fn.call(that);
-        case 1:
-            return un ? fn(args[0]) : fn.call(that, args[0]);
-        case 2:
-            return un ? fn(args[0], args[1]) : fn.call(that, args[0], args[1]);
-        case 3:
-            return un ? fn(args[0], args[1], args[2]) : fn.call(that, args[0], args[1], args[2]);
-        case 4:
-            return un ? fn(args[0], args[1], args[2], args[3]) : fn.call(that, args[0], args[1], args[2], args[3]);
+},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Lqzq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _previewViewJs = require("./previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
+var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class BookmarksView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".bookmarks__list");
+    _errorMessage = "No bookmarks yet. Find a nice recipe and bookmark it ;)";
+    _message = "";
+    addHandlerRender(handler) {
+        window.addEventListener("load", handler);
     }
-    return fn.apply(that, args);
-};
+    _generateMarkup() {
+        return this._data.map((bookmark)=>(0, _previewViewJsDefault.default).render(bookmark, false)).join("");
+    }
+}
+exports.default = new BookmarksView();
 
-},{}],"lPhWk":[function(require,module,exports) {
-var document = require("4f8d3f9801bd0f96").document;
-module.exports = document && document.documentElement;
+},{"./View.js":"5cUXS","./previewView.js":"1FDQ6","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i6DNj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parcel 2
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class AddRecipeView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".upload");
+    _message = "Recipe was successfully uploaded :)";
+    _window = document.querySelector(".add-recipe-window");
+    _overlay = document.querySelector(".overlay");
+    _btnOpen = document.querySelector(".nav__btn--add-recipe");
+    _btnClose = document.querySelector(".btn--close-modal");
+    // COnstructor method
+    constructor(){
+        // Since this is a child class, we need to start by calling super(), and only after that we can use the this keywords
+        super();
+        this._addHandlerShowWindow();
+        this._addHandlerHideWindow();
+    }
+    toggleWindow() {
+        this._overlay.classList.toggle("hidden");
+        this._window.classList.toggle("hidden");
+    }
+    _addHandlerShowWindow() {
+        this._btnOpen.addEventListener("click", this.toggleWindow.bind(this));
+    }
+    _addHandlerHideWindow() {
+        this._btnClose.addEventListener("click", this.toggleWindow.bind(this));
+        this._overlay.addEventListener("click", this.toggleWindow.bind(this));
+    }
+    addHandlerUpload(handler) {
+        this._parentElement.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const dataArr = [
+                ...new FormData(this)
+            ];
+            const data = Object.fromEntries(dataArr); // takes an array of entries and converts to object
+            handler(data);
+        });
+    }
+    _generateMarkup() {}
+}
+exports.default = new AddRecipeView(); // Publisher - subscriber pattern for addeventlistener :
+ // that works by creating a publisher,  which is basically a function  which is the one listening for the event,  which receives a handler function,  which in our case, is going to be a controller  that lives in the controller.js.  With this,  we will then be able to listen for the event in the View where it makes sense, while at the same time, being able to handle that event from the controller.
 
-},{"4f8d3f9801bd0f96":"8xCse"}],"frIbo":[function(require,module,exports) {
-var toString = {}.toString;
-module.exports = function(it) {
-    return toString.call(it).slice(8, -1);
-};
-
-},{}],"dXNgZ":[function(require,module,exports) {
+},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dXNgZ":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -2395,215 +2623,6 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"9OQAM":[function(require,module,exports) {
-// we create the class, and we will then NOT export that class, but ecport an instance (object) that was created by this class
-// this class is used to get the query and listen for the click event
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-class SearchView {
-    _parentElement = document.querySelector(".search");
-    getQuery() {
-        const query = this._parentElement.querySelector(".search__field").value;
-        this._clearInput();
-        return query;
-    }
-    _clearInput() {
-        this._parentElement.querySelector(".search__field").value = "";
-    }
-    addHandlerSearch(handler) {
-        // the listener is added to the form, not to the button, because the form will listen to the submit event, so either button or pressing the enter key
-        this._parentElement.addEventListener("submit", function(e) {
-            // preventDefault() because otherwise the page is going to reload
-            e.preventDefault();
-            handler();
-        });
-    }
-}
-exports.default = new SearchView();
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cSbZE":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _previewViewJs = require("./previewView.js");
-var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
-var _iconsSvg = require("url:../../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class ResultsView extends (0, _viewJsDefault.default) {
-    _parentElement = document.querySelector(".results");
-    _errorMessage = "No recipes found for your query! Please try again ;)";
-    _message = "";
-    _generateMarkup() {
-        return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join("");
-    }
-}
-exports.default = new ResultsView();
-
-},{"./View.js":"5cUXS","./previewView.js":"1FDQ6","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1FDQ6":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _iconsSvg = require("url:../../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class PreviewView extends (0, _viewJsDefault.default) {
-    _parentElement = "";
-    _generateMarkup(result) {
-        const id = window.location.hash.slice(1);
-        return `
-<li class="preview">
-  <a class="preview__link ${this._data.id === id ? "preview__link--active" : ""}" href="#${this._data.id}">
-    <figure class="preview__fig">
-      <img src="${this._data.image}" alt="${this._data.title}" />
-    </figure>
-    <div class="preview__data">
-      <h4 class="preview__title">${this._data.title}</h4>
-      <p class="preview__publisher">${this._data.publisher}</p>
-      <div class="preview__user-generated ${this._data.key ? "" : "hidden"}">
-      <svg>
-      <use href="${0, _iconsSvgDefault.default}#icon-user"></use>
-      </svg>
-    </div>
-  </div>
-  </a>
-</li>
-  `;
-    }
-}
-exports.default = new PreviewView();
-
-},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6z7bi":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _iconsSvg = require("url:../../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class PaginationView extends (0, _viewJsDefault.default) {
-    _parentElement = document.querySelector(".pagination");
-    addHandlerClick(handler) {
-        this._parentElement.addEventListener("click", function(e) {
-            // closest method is like querySelector, but instead of searching down in the tree, it searches UP in the tree
-            // creating a new controller that will be executed whenever a click happens
-            const btn = e.target.closest(".btn--inline");
-            if (!btn) return;
-            const goToPage = +btn.dataset.goto;
-            handler(goToPage);
-        });
-    }
-    _generateMarkup() {
-        const curPage = this._data.page;
-        const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
-        // Page 1, and there are other pages
-        if (curPage === 1 && numPages > 1) return `
-         <button data-goto=${curPage + 1} class="btn--inline pagination__btn--next">
-            <span>Page ${curPage + 1}</span>
-            <svg class="search__icon">
-              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
-            </svg>
-          </button>
-      `;
-        // Last page
-        if (curPage === numPages && numPages > 1) return `
-   <button data-goto=${curPage - 1} class="btn--inline pagination__btn--prev">
-      <svg class="search__icon">
-        <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
-      </svg>
-      <span>Page ${curPage - 1}</span>
-    </button>
-    `;
-        // Other page
-        if (curPage < numPages) return `
-      <button data-goto=${curPage - 1} class="btn--inline pagination__btn--prev">
-         <svg class="search__icon">
-           <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
-         </svg>
-         <span>Page ${curPage - 1}</span>
-       </button>
-       <button data-goto=${curPage + 1} class="btn--inline pagination__btn--next">
-            <span>Page ${curPage + 1}</span>
-            <svg class="search__icon">
-              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
-            </svg>
-          </button>
-       `;
-        // Page 1, and there are NO other pages
-        return "";
-    }
-}
-exports.default = new PaginationView(); // Publisher - subscriber pattern for addeventlistener :
- // that works by creating a publisher,  which is basically a function  which is the one listening for the event,  which receives a handler function,  which in our case, is going to be a controller  that lives in the controller.js.  With this,  we will then be able to listen for the event in the View where it makes sense, while at the same time, being able to handle that event from the controller.
-
-},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Lqzq":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _previewViewJs = require("./previewView.js");
-var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
-var _iconsSvg = require("url:../../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class BookmarksView extends (0, _viewJsDefault.default) {
-    _parentElement = document.querySelector(".bookmarks__list");
-    _errorMessage = "No bookmarks yet. Find a nice recipe and bookmark it ;)";
-    _message = "";
-    addHandlerRender(handler) {
-        window.addEventListener("load", handler);
-    }
-    _generateMarkup() {
-        return this._data.map((bookmark)=>(0, _previewViewJsDefault.default).render(bookmark, false)).join("");
-    }
-}
-exports.default = new BookmarksView();
-
-},{"./View.js":"5cUXS","./previewView.js":"1FDQ6","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i6DNj":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _iconsSvg = require("url:../../img/icons.svg"); // Parcel 2
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class AddRecipeView extends (0, _viewJsDefault.default) {
-    _parentElement = document.querySelector(".upload");
-    _message = "Recipe was successfully uploaded :)";
-    _window = document.querySelector(".add-recipe-window");
-    _overlay = document.querySelector(".overlay");
-    _btnOpen = document.querySelector(".nav__btn--add-recipe");
-    _btnClose = document.querySelector(".btn--close-modal");
-    // COnstructor method
-    constructor(){
-        // Since this is a child class, we need to start by calling super(), and only after that we can use the this keywords
-        super();
-        this._addHandlerShowWindow();
-        this._addHandlerHideWindow();
-    }
-    toggleWindow() {
-        this._overlay.classList.toggle("hidden");
-        this._window.classList.toggle("hidden");
-    }
-    _addHandlerShowWindow() {
-        this._btnOpen.addEventListener("click", this.toggleWindow.bind(this));
-    }
-    _addHandlerHideWindow() {
-        this._btnClose.addEventListener("click", this.toggleWindow.bind(this));
-        this._overlay.addEventListener("click", this.toggleWindow.bind(this));
-    }
-    addHandlerUpload(handler) {
-        this._parentElement.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const dataArr = [
-                ...new FormData(this)
-            ];
-            const data = Object.fromEntries(dataArr); // takes an array of entries and converts to object
-            handler(data);
-        });
-    }
-    _generateMarkup() {}
-}
-exports.default = new AddRecipeView(); // Publisher - subscriber pattern for addeventlistener :
- // that works by creating a publisher,  which is basically a function  which is the one listening for the event,  which receives a handler function,  which in our case, is going to be a controller  that lives in the controller.js.  With this,  we will then be able to listen for the event in the View where it makes sense, while at the same time, being able to handle that event from the controller.
-
-},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aD7Zm","aenu9"], "aenu9", "parcelRequire3a11")
+},{}]},["aD7Zm","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
