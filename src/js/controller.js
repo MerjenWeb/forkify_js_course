@@ -119,6 +119,13 @@ const controlAddRecipe = async function (newRecipe) {
     // Success message
     addRecipeView.renderMessage();
 
+    // Render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change ID in URL
+    // pushState method will allow us to change the URL w/o reloading the page. pushState() takes three arguments : 1)state(doesnt really matter), 2) title -- '' -- which is also not relevant, 3) the URL
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
     //CLose form window
     setTimeout(function () {
       addRecipeView.toggleWindow();
