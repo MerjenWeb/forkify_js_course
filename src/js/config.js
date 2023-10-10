@@ -6,3 +6,5 @@ export const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes';
 // https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza
 export const TIMEOUT_SEC = 30;
 export const RES_PER_PAGE = 10;
+export const KEY = '70ae57c3-8e2a-4817-bf7e-8d6d86c5b791';
+export const MODAL_CLOSE_SEC = 2.5;
